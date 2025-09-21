@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omnipotent Tech</title>
+    <style>
+        /* Estilo  para wl mensaje de conexión */
+        .connection-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="logo">
+                <h1>Omnipotent Tech</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#mision-vision">Misión y Visión</a></li>
+                    <li><a href="#informacion">Informacion de la Empresa</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="#buzon">Buzon de Sugerencias</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+    <div id="inicio" class="section">
+        <div class="container">
+            <h2>Bienvenidos a Omnipotent Tech</h2>
+            <p>
+                Somos tu destino confiable para componentes electrónicos y software original de la más alta calidad.<br>
+
+Nuestra misión es brindarte acceso a tecnología genuina a través de un servicio en línea eficiente y seguro, garantizando que cada transacción supere tus expectativas.
+<br>
+En Omnipotent Tech aspiramos a consolidarnos como tu plataforma líder de confianza, innovando constantemente para ofrecerte la mejor experiencia de compra con atención personalizada.
+<br>
+Descubre la diferencia de comprar con seguridad y confianza. ¡Estamos aquí para potenciar tu mundo tecnológico!
+</p>
+        </div>
+    </div>
+
+        <div id="mision-vision" class="section">
+        <div class="container">
+            <div id="mision">
+                <h2>Misión</h2>
+                <p>Brindar a los usuarios acceso a componentes electrónicos y software original de calidad, a través de un servicio en línea eficiente y confiable que garantice seguridad en cada transacción.</p>
+            </div>
+            <div id="vision">
+                <h2>Visión</h2>
+                <p>Consolidarse como una plataforma líder en la venta de componentes electrónicos y licencias de software, reconocida por su innovación, confianza y atención al cliente.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="informacion" class="section">
+        <div class="container">
+            <h2>Información de la Empresa</h2>
+            <div class="info-item">
+                <h3>Fundación</h3>
+                <p>2025</p>
+            </div>
+            <div class="info-item">
+                <h3>Direccion</h3>
+                <p>Dirección: Av. Tecnológico #452, Col. Industrial, C.P. 58000, Morelia, Michoacán, México.</p>
+            </div>
+            <div class="info-item">
+                <h3>Telefono</h3>
+                <p>44-22-12-10-00</p>
+            </div>
+            <div class="info-item">
+                <h3>Correo Electronico</h3>
+                <p>ventas@omnipotenttech.com.mx</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contacto" class="section">
+        <div class="container">
+            <h2>Contacto</h2>
+            <div class="contact-info">
+                <h3>Información de Contacto</h3>
+                <p>Dirección: </p>
+                <p>Teléfono: 44-12-11-94-83</p>
+                <p>Email: contacto@electrosoft.com.mx</p>
+                <p>Redes Socales: Facebook: <a href="facebook.com/ElectroSoftMX">facebook.com/ElectroSoftMX</a>
+                    Instagram: <a href="instagram.com/electrosoft.mx">instagram.com/electrosoft.mx</a>
+                    Twitter (X): <a href="x.com/ElectroSoft_MX">x.com/ElectroSoft_MX</a>
+                    </p>
+            </div>
+        </div>
+    </div>
+
+<div id="buzon" class="section">
+        <div class="container">
+            <h2>Buzon de Quejas y Sugerencias</h2>
+            
+            <!-- Mensajes de estado de conexión -->
+            <div id="connectionStatus" class="connection-status"></div>
+            
+            <div class="contact-form">
+                <h3>Envíanos un mensaje</h3>
+                <form id="suggestionForm">
+                    <div>
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" name="nombre">
+                    </div>
+                    <div>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div>
+                        <label for="mensaje">Mensaje:</label>
+                        <textarea id="mensaje" name="mensaje"></textarea>
+                    </div>
+                    <button type="button" id="testConnection">Probar conexión a BD</button>
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            <p>Omnipotent Tech &copy; 2025 - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testButton = document.getElementById('testConnection');
+            const statusDiv = document.getElementById('connectionStatus');
+            const form = document.getElementById('suggestionForm');
+            
+            // Función para probar la conexión a la base de datos
+            testButton.addEventListener('click', function() {
+                statusDiv.style.display = 'block';
+                statusDiv.textContent = "Probando conexión...";
+                statusDiv.className = "connection-status";
+                
+                fetch('http://10.31.2.139/prograweb/conexion.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            statusDiv.textContent = "✓ " + data.message + " - " + data.data;
+                            statusDiv.classList.add('success');
+                        } else {
+                            statusDiv.textContent = "✗ " + data.message;
+                            statusDiv.classList.add('error');
+                        }
+                    })
+                    .catch(error => {
+                        statusDiv.textContent = "✗ Error al conectar con el servidor: " + error;
+                        statusDiv.classList.add('error');
+                    });
+            });
+            
+            // Manejar el envío del formulario
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Formulario enviado.');
+            });
+        });
+    </script>
+</body>
+</html>
