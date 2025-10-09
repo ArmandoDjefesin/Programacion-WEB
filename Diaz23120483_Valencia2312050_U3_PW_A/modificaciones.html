@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="formulario.css">
-    <title>Altas - Omnipotent Tech</title>
+    <title>Modificaciones - Omnipotent Tech</title>
 </head>
 <body>
     <header>
-        <h1>Altas de Productos y Servicios</h1>
+        <h1>Modificación de Productos y Servicios</h1>
         <nav>
             <a href="index.html">🏠 Inicio</a>
         </nav>
@@ -16,10 +16,16 @@
 
     <main>
         <section>
-            <h2>Registrar un nuevo producto o servicio</h2>
-            <form id="formAltas">
+            <h2>Buscar y modificar</h2>
+            <form id="formBuscar">
+                <label for="id_producto">ID del Producto:</label>
+                <input type="number" id="id_producto" name="id_producto" required>
+                <button type="button">Buscar</button>
+            </form>
+
+            <form id="formModificar">
                 <label for="nombre">Nombre/Descripción:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre">
 
                 <label for="categoria">Categoría:</label>
                 <input type="text" id="categoria" name="categoria">
@@ -37,7 +43,7 @@
                 <input type="text" id="proveedor" name="proveedor">
 
                 <label for="stock">Cantidad en Stock:</label>
-                <input type="number" id="stock" name="stock" min="0">
+                <input type="number" id="stock" name="stock">
 
                 <label for="precio">Precio Unitario:</label>
                 <input type="number" id="precio" name="precio" step="0.01">
@@ -55,8 +61,8 @@
                     <option value="Agotado">Agotado</option>
                 </select>
 
-                <button type="submit">Guardar</button>
-                <button type="reset">Limpiar</button>
+                <button type="submit">Guardar Cambios</button>
+                <button type="reset">Cancelar</button>
             </form>
         </section>
     </main>
@@ -66,8 +72,8 @@
         </div>
         <div class="container">
 
-            <p>
-            <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/altas.html" target="_blank">
+           <p>
+            <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/modificaciones.html" target="_blank">
                 <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
             </a>
             <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
