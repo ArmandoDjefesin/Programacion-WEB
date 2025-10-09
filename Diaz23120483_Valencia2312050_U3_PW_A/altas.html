@@ -17,67 +17,123 @@
     <main>
         <section>
             <h2>Registrar un nuevo producto o servicio</h2>
-            <form id="formAltas">
+
+            <form id="formAltas" novalidate>
+                <!-- Nombre / Descripción -->
                 <label for="nombre">Nombre/Descripción:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <input type="text" id="nombre" name="nombre" 
+                    required 
+                    minlength="3" maxlength="100"
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.,\-_\s]{3,100}"
+                    title="El nombre o descripción debe tener entre 3 y 100 caracteres, y solo puede contener letras, números y signos básicos.">
 
+                <!-- Categoría -->
                 <label for="categoria">Categoría:</label>
-                <input type="text" id="categoria" name="categoria">
+                <input type="text" id="categoria" name="categoria" 
+                    required 
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,50}"
+                    title="La categoría debe tener solo letras y espacios, entre 3 y 50 caracteres.">
 
+                <!-- Tipo -->
                 <label for="tipo">Tipo:</label>
-                <input type="text" id="tipo" name="tipo">
+                <input type="text" id="tipo" name="tipo" 
+                    required 
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,50}"
+                    title="El tipo debe contener solo letras y espacios, entre 3 y 50 caracteres.">
 
+                <!-- Marca -->
                 <label for="marca">Marca/Fabricante:</label>
-                <input type="text" id="marca" name="marca">
+                <input type="text" id="marca" name="marca"
+                    required
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s\-]{2,50}"
+                    title="La marca o fabricante debe tener entre 2 y 50 caracteres, y puede incluir letras, números y guiones.">
 
+                <!-- Modelo -->
                 <label for="modelo">Modelo/Versión:</label>
-                <input type="text" id="modelo" name="modelo">
+                <input type="text" id="modelo" name="modelo"
+                    maxlength="50"
+                    pattern="[A-Za-z0-9\-_.\s]{0,50}"
+                    title="El modelo o versión puede contener letras, números, guiones y puntos.">
 
+                <!-- Proveedor -->
                 <label for="proveedor">Proveedor:</label>
-                <input type="text" id="proveedor" name="proveedor">
+                <input type="text" id="proveedor" name="proveedor"
+                    required
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,50}"
+                    title="El nombre del proveedor debe contener solo letras y espacios, entre 3 y 50 caracteres.">
 
+                <!-- Stock -->
                 <label for="stock">Cantidad en Stock:</label>
-                <input type="number" id="stock" name="stock" min="0">
+                <input type="number" id="stock" name="stock" 
+                    required 
+                    min="0" max="100000"
+                    title="El stock debe ser un número entero igual o mayor a 0.">
 
+                <!-- Precio -->
                 <label for="precio">Precio Unitario:</label>
-                <input type="number" id="precio" name="precio" step="0.01">
+                <input type="number" id="precio" name="precio" 
+                    required 
+                    min="0.01" step="0.01"
+                    title="El precio debe ser un número mayor a 0 con hasta dos decimales.">
 
+                <!-- Código -->
                 <label for="codigo">Código de Licencia:</label>
-                <input type="text" id="codigo" name="codigo">
+                <input type="text" id="codigo" name="codigo"
+                    pattern="[A-Za-z0-9\-]{5,30}"
+                    title="El código de licencia debe tener entre 5 y 30 caracteres alfanuméricos.">
 
+                <!-- Fecha -->
                 <label for="fecha">Fecha de Ingreso:</label>
-                <input type="date" id="fecha" name="fecha">
+                <input type="date" id="fecha" name="fecha"
+                    required
+                    max="<?= date('Y-m-d'); ?>"
+                    title="La fecha de ingreso no puede ser posterior al día de hoy.">
 
+                <!-- Estado -->
                 <label for="estado">Estado:</label>
-                <select id="estado" name="estado">
+                <select id="estado" name="estado" required>
+                    <option value="">Seleccione una opción</option>
                     <option value="Disponible">Disponible</option>
                     <option value="Bajo Stock">Bajo Stock</option>
                     <option value="Agotado">Agotado</option>
                 </select>
 
+                <!-- Botones -->
                 <button type="submit">Guardar</button>
                 <button type="reset">Limpiar</button>
             </form>
         </section>
     </main>
+
     <footer style="margin-bottom: auto;">
         <div class="container">
             <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
         </div>
         <div class="container">
-
             <p>
-            <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/altas.html" target="_blank">
-                <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
-            </a>
-            <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
-                <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
-            </a>
-        </p>
-
-
+                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/altas.html" target="_blank">
+                    <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
+                </a>
+                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
+                    <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
+                </a>
+            </p>
         </div>
     </footer>
+
+    <script>
+        // Validación de fecha no futura
+        const fechaInput = document.getElementById("fecha");
+        const hoy = new Date().toISOString().split("T")[0];
+        fechaInput.setAttribute("max", hoy);
+
+        // Validación personalizada del formulario
+        document.getElementById("formAltas").addEventListener("submit", function(e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                alert("Por favor, revisa los campos marcados. Algunos datos son inválidos o están incompletos.");
+            }
+        });
+    </script>
 </body>
 </html>
-
