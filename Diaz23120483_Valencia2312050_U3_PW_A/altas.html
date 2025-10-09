@@ -18,7 +18,7 @@
         <section>
             <h2>Registrar un nuevo producto o servicio</h2>
 
-            <form id="formAltas" novalidate>
+            <form id="formAltas">
                 <!-- Nombre / Descripción -->
                 <label for="nombre">Nombre/Descripción:</label>
                 <input type="text" id="nombre" name="nombre" 
@@ -27,12 +27,12 @@
                     pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.,\-_\s]{3,100}"
                     title="El nombre o descripción debe tener entre 3 y 100 caracteres, y solo puede contener letras, números y signos básicos.">
 
-                <!-- Categoría -->
+                <!-- Categoría --->
                 <label for="categoria">Categoría:</label>
                 <input type="text" id="categoria" name="categoria" 
-                    required 
+                    required
                     pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ\s]{3,50}"
-                    title="La categoría debe tener solo letras y espacios, entre 3 y 50 caracteres.">
+                    title="Solo letras y espacios (3-50 caracteres)">
 
                 <!-- Tipo -->
                 <label for="tipo">Tipo:</label>
@@ -127,11 +127,76 @@
         const hoy = new Date().toISOString().split("T")[0];
         fechaInput.setAttribute("max", hoy);
 
-        // Validación personalizada del formulario
+        // Función para validar solo letras y espacios en tiempo real
+        function soloLetrasYEspacios(input) {
+            // Expresión regular que solo permite letras (incluyendo acentos y ñ) y espacios
+            const regex = /[^A-Za-zÁÉÍÓÚáéíóúñÑ\s]/g;
+            
+            // Si se presiona una tecla no permitida, prevenir la entrada
+            if (regex.test(input.value)) {
+                // Remover caracteres no permitidos
+                input.value = input.value.replace(regex, '');
+                
+                // Opcional: mostrar mensaje temporal
+                mostrarMensajeTemporal('Solo se permiten letras y espacios', input);
+            }
+        }
+
+        // Función para mostrar mensaje temporal
+        function mostrarMensajeTemporal(mensaje, elemento) {
+            const mensajeDiv = document.createElement('div');
+            mensajeDiv.textContent = mensaje;
+            mensajeDiv.style.cssText = `
+                position: absolute;
+                background: #ff4444;
+                color: white;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-size: 12px;
+                z-index: 1000;
+                margin-top: 5px;
+            `;
+            
+            const rect = elemento.getBoundingClientRect();
+            mensajeDiv.style.left = rect.left + 'px';
+            mensajeDiv.style.top = (rect.bottom + window.scrollY) + 'px';
+            
+            document.body.appendChild(mensajeDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(mensajeDiv);
+            }, 2000);
+        }
+
+        // Aplicar validación en tiempo real a los campos que solo deben tener letras
+        document.getElementById('categoria').addEventListener('input', function(e) {
+            soloLetrasYEspacios(this);
+        });
+
+        document.getElementById('tipo').addEventListener('input', function(e) {
+            soloLetrasYEspacios(this);
+        });
+
+        document.getElementById('proveedor').addEventListener('input', function(e) {
+            soloLetrasYEspacios(this);
+        });
+
+        // Validación del formulario al enviar CON MENSAJE DE CONFIRMACIÓN
         document.getElementById("formAltas").addEventListener("submit", function(e) {
             if (!this.checkValidity()) {
                 e.preventDefault();
-                alert("Por favor, revisa los campos marcados. Algunos datos son inválidos o están incompletos.");
+                alert("❌ Por favor, revisa los campos marcados. Algunos datos son inválidos o están incompletos.");
+            } else {
+                e.preventDefault(); // Prevenir envío real para demostración
+                
+                // Mostrar mensaje de confirmación
+                alert("✅ ¡Datos enviados correctamente!\n\nEl producto/service ha sido registrado en el sistema.");
+                
+                // Opcional: Limpiar el formulario después del envío
+                this.reset();
+                
+                // Opcional: Redirigir a otra página
+                // window.location.href = "index.html";
             }
         });
     </script>
