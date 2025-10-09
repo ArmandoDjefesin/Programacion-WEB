@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="formulario.css">
+    <title>Altas - Omnipotent Tech</title>
+</head>
+<body>
+    <header>
+        <h1>Altas de Productos y Servicios</h1>
+        <nav>
+            <a href="index.html">🏠 Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Registrar un nuevo producto o servicio</h2>
+            <form id="formAltas">
+                <label for="nombre">Nombre/Descripción:</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="categoria">Categoría:</label>
+                <input type="text" id="categoria" name="categoria">
+
+                <label for="tipo">Tipo:</label>
+                <input type="text" id="tipo" name="tipo">
+
+                <label for="marca">Marca/Fabricante:</label>
+                <input type="text" id="marca" name="marca">
+
+                <label for="modelo">Modelo/Versión:</label>
+                <input type="text" id="modelo" name="modelo">
+
+                <label for="proveedor">Proveedor:</label>
+                <input type="text" id="proveedor" name="proveedor">
+
+                <label for="stock">Cantidad en Stock:</label>
+                <input type="number" id="stock" name="stock" min="0">
+
+                <label for="precio">Precio Unitario:</label>
+                <input type="number" id="precio" name="precio" step="0.01">
+
+                <label for="codigo">Código de Licencia:</label>
+                <input type="text" id="codigo" name="codigo">
+
+                <label for="fecha">Fecha de Ingreso:</label>
+                <input type="date" id="fecha" name="fecha">
+
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Bajo Stock">Bajo Stock</option>
+                    <option value="Agotado">Agotado</option>
+                </select>
+
+                <button type="submit">Guardar</button>
+                <button type="reset">Limpiar</button>
+            </form>
+        </section>
+    </main>
+    <footer style="margin-bottom: auto;">
+        <div class="container">
+            <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+        </div>
+        <div class="container">
+
+            <p>
+            <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/altas.html" target="_blank">
+                <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
+            </a>
+            <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
+                <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
+            </a>
+        </p>
+
+
+        </div>
+    </footer>
+</body>
+</html>
+
