@@ -477,10 +477,10 @@
 
                     const confirmacion = confirm(
                         "¿CONFIRMAR REGISTRO DEL PRODUCTO?\n\n" +
-                        `📦 Producto: ${nombre}\n` +
-                        `📁 Categoría: ${categoria}\n` +
-                        `💰 Precio: $${parseFloat(precio).toFixed(2)}\n` +
-                        `📊 Stock: ${stock} unidades\n\n` +
+                        `Producto: ${nombre}\n` +
+                        `Categoría: ${categoria}\n` +
+                        `Precio: $${parseFloat(precio).toFixed(2)}\n` +
+                        `Stock: ${stock} unidades\n\n` +
                         "¿Desea guardar este producto en el catálogo?"
                     );
 
@@ -509,7 +509,7 @@
                     this.classList.remove('loading');
                 }, 1500);
             } else {
-                alert("❌ ERROR EN EL FORMULARIO\n\nPor favor, corrige los campos marcados en rojo antes de enviar.");
+                alert("ERROR EN EL FORMULARIO\n\nPor favor, corrige los campos marcados en rojo antes de enviar.");
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = 'Guardar Producto';
                 this.classList.remove('loading');

@@ -295,8 +295,8 @@
                     </div>
 
                     <div class="grupo-botones">
-                        <button type="submit" id="btn-modificar" class="btn btn-success">💾 Guardar Cambios</button>
-                        <button type="reset" class="btn btn-secondary">🗑️ Cancelar</button>
+                        <button type="submit" id="btn-modificar" class="btn btn-success">Guardar Cambios</button>
+                        <button type="reset" class="btn btn-secondary">Cancelar</button>
                     </div>
                 </form>
             </div>
@@ -532,7 +532,7 @@
             }
 
             if (!formularioValido) {
-                alert('❌ Complete correctamente todos los campos obligatorios.');
+                alert('Complete correctamente todos los campos obligatorios.');
                 return;
             }
 
@@ -543,12 +543,12 @@
 
             // Mostrar confirmación
             const confirmacionModificar = confirm(
-                `⚠️ CONFIRMAR MODIFICACIÓN\n\n` +
-                `🆔 ID del Producto: ${idProductoBuscar.value}\n` +
-                `📦 Nuevo Nombre: ${document.getElementById('nombre').value}\n` +
-                `💰 Nuevo Precio: $${parseFloat(document.getElementById('precio').value).toFixed(2)}\n` +
-                `📊 Nuevo Stock: ${document.getElementById('stock').value}\n` +
-                `📈 Nuevo Estado: ${document.getElementById('estado').value}\n\n` +
+                `CONFIRMAR MODIFICACIÓN\n\n` +
+                `ID del Producto: ${idProductoBuscar.value}\n` +
+                `Nuevo Nombre: ${document.getElementById('nombre').value}\n` +
+                `Nuevo Precio: $${parseFloat(document.getElementById('precio').value).toFixed(2)}\n` +
+                `Nuevo Stock: ${document.getElementById('stock').value}\n` +
+                `Nuevo Estado: ${document.getElementById('estado').value}\n\n` +
                 `¿Desea guardar los cambios en este producto?`
             );
 
@@ -557,23 +557,25 @@
                 setTimeout(() => {
                     // Mostrar alerta de éxito
                     alert(
-                        `🎉 ¡MODIFICACIÓN EXITOSA!\n\n` +
-                        `✅ El producto "${document.getElementById('nombre').value}" ha sido actualizado correctamente.\n\n` +
-                        `📊 Estado: Cambios guardados en el sistema\n` +
-                        `🆔 ID: ${idProductoBuscar.value}\n` +
-                        `⏰ Fecha de modificación: ${new Date().toLocaleDateString()}`
+                        `¡MODIFICACIÓN EXITOSA!\n\n` +
+                        `El producto "${document.getElementById('nombre').value}" ha sido actualizado correctamente.\n\n` +
+                        `Estado: Cambios guardados en el sistema\n` +
+                        `ID: ${idProductoBuscar.value}\n` +
+                        `Fecha de modificación: ${new Date().toLocaleDateString()}`
                     );
 
                     // Restaurar botón
                     btnModificar.disabled = false;
-                    btnModificar.textContent = '💾 Guardar Cambios';
+                    btnModificar.textContent = 'Guardar Cambios';
                     formModificar.classList.remove('loading');
+
+                    window.location.href = "index.html";
 
                 }, 1000);
             } else {
                 // Restaurar botón si cancela
                 btnModificar.disabled = false;
-                btnModificar.textContent = '💾 Guardar Cambios';
+                btnModificar.textContent = 'Guardar Cambios';
                 formModificar.classList.remove('loading');
             }
         });
