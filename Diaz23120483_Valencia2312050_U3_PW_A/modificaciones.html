@@ -294,6 +294,15 @@
                         <div class="mensaje-error" id="error-estado">Seleccione un estado válido.</div>
                     </div>
 
+                    <div class="grupo-campo">
+                        <label for="imagen">Imagen del Producto:</label>
+                        <input type="file" id="imagen" name="imagen" accept="image/*">
+                        <div class="preview-container">
+                            <img id="preview-imagen" src="" alt="Vista previa del producto" style="max-width: 250px; display: none; border-radius: 8px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+
                     <div class="grupo-botones">
                         <button type="submit" id="btn-modificar" class="btn btn-success">Guardar Cambios</button>
                         <button type="reset" class="btn btn-secondary">Cancelar</button>
