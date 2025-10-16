@@ -1,548 +1,220 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="formulario.css">
-    <title>Altas - Omnipotent Tech</title>
-    <style>
-        /* Estilos adicionales para mejor UX */
-        .campo-valido {
-            border-color: #28a745 !important;
-            background-color: #f8fff9;
-        }
-        
-        .campo-invalido {
-            border-color: #dc3545 !important;
-            background-color: #fff8f8;
-        }
-        
-        .mensaje-error {
-            color: #dc3545;
-            font-size: 0.875em;
-            margin-top: 0.25rem;
-            display: none;
-        }
-        
-        .mensaje-error.mostrar {
-            display: block;
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        
-        .grupo-campo {
-            position: relative;
-            margin-bottom: 1rem;
-        }
-        
-        .btn-submit:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        .progreso-validacion {
-            height: 4px;
-            background: #e9ecef;
-            margin: 10px 0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .progreso-llenado {
-            height: 100%;
-            background: #28a745;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="formulario.css">
+  <title>Altas - Omnipotent Tech</title>
+  <style>
+    .campo-valido {
+      border-color: #28a745 !important;
+      background-color: #f8fff9;
+    }
+    .campo-invalido {
+      border-color: #dc3545 !important;
+      background-color: #fff8f8;
+    }
+    .mensaje-error {
+      color: #dc3545;
+      font-size: 0.875em;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .mensaje-error.mostrar {
+      display: block;
+    }
+    .grupo-campo {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .preview-imagen {
+      display: none;
+      margin-top: 10px;
+      max-width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.2);
+    }
+    .info-archivo {
+      font-size: 0.9em;
+      margin-top: 5px;
+      color: #555;
+    }
+    .btn-eliminar-imagen {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-submit:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Altas de Productos y Servicios</h1>
-        <nav>
-            <a href="index.html">🏠 Inicio</a>
-        </nav>
-    </header>
+  <header>
+    <h1>Altas de Productos y Servicios</h1>
+    <nav><a href="index.html">🏠 Inicio</a></nav>
+  </header>
 
-    <main>
-        <section>
-            <h2>Registrar un nuevo producto o servicio</h2>
-            
-            <!-- Barra de progreso de validación -->
-            <div class="progreso-validacion">
-                <div class="progreso-llenado" id="progreso-validacion"></div>
-            </div>
+  <main>
+    <section>
+      <h2>Registrar un nuevo producto o servicio</h2>
 
-            <form id="formAltas">
-                <!-- Nombre / Descripción -->
-                <div class="grupo-campo">
-                    <label for="nombre">Nombre/Descripción:</label>
-                    <input type="text" id="nombre" name="nombre" 
-                        required 
-                        minlength="3" maxlength="100"
-                        placeholder="Ej: Laptop Gaming HP Pavilion">
-                    <div class="mensaje-error" id="error-nombre"></div>
-                </div>
-
-                <!-- Categoría -->
-                <div class="grupo-campo">
-                    <label for="categoria">Categoría:</label>
-                    <input type="text" id="categoria" name="categoria" 
-                        required
-                        placeholder="Ej: Electrónicos">
-                    <div class="mensaje-error" id="error-categoria"></div>
-                </div>
-
-                <!-- Tipo -->
-                <div class="grupo-campo">
-                    <label for="tipo">Tipo:</label>
-                    <input type="text" id="tipo" name="tipo" 
-                        required 
-                        placeholder="Ej: Laptop">
-                    <div class="mensaje-error" id="error-tipo"></div>
-                </div>
-
-                <!-- Marca -->
-                <div class="grupo-campo">
-                    <label for="marca">Marca/Fabricante:</label>
-                    <input type="text" id="marca" name="marca"
-                        required
-                        placeholder="Ej: HP">
-                    <div class="mensaje-error" id="error-marca"></div>
-                </div>
-
-                <!-- Modelo -->
-                <div class="grupo-campo">
-                    <label for="modelo">Modelo/Versión:</label>
-                    <input type="text" id="modelo" name="modelo"
-                        placeholder="Ej: 15-dw1000la (opcional)">
-                    <div class="mensaje-error" id="error-modelo"></div>
-                </div>
-
-                <!-- Proveedor -->
-                <div class="grupo-campo">
-                    <label for="proveedor">Proveedor:</label>
-                    <input type="text" id="proveedor" name="proveedor"
-                        required
-                        placeholder="Ej: Distribuidora Tech S.A.">
-                    <div class="mensaje-error" id="error-proveedor"></div>
-                </div>
-
-                <!-- Stock -->
-                <div class="grupo-campo">
-                    <label for="stock">Cantidad en Stock:</label>
-                    <input type="number" id="stock" name="stock" 
-                        required 
-                        min="0" max="100000"
-                        placeholder="0">
-                    <div class="mensaje-error" id="error-stock"></div>
-                </div>
-
-                <!-- Precio -->
-                <div class="grupo-campo">
-                    <label for="precio">Precio Unitario:</label>
-                    <input type="number" id="precio" name="precio" 
-                        required 
-                        min="0.01" step="0.01"
-                        placeholder="0.00">
-                    <div class="mensaje-error" id="error-precio"></div>
-                </div>
-
-                <!-- Código -->
-                <div class="grupo-campo">
-                    <label for="codigo">Código de Licencia:</label>
-                    <input type="text" id="codigo" name="codigo"
-                        placeholder="Ej: LIC-2024-ABC123 (opcional)">
-                    <div class="mensaje-error" id="error-codigo"></div>
-                </div>
-
-                <!-- Fecha -->
-                <div class="grupo-campo">
-                    <label for="fecha">Fecha de Ingreso:</label>
-                    <input type="date" id="fecha" name="fecha"
-                        required>
-                    <div class="mensaje-error" id="error-fecha"></div>
-                </div>
-
-                <!-- Estado -->
-                <div class="grupo-campo">
-                    <label for="estado">Estado:</label>
-                    <select id="estado" name="estado" required>
-                        <option value="">Seleccione una opción</option>
-                        <option value="Disponible">Disponible</option>
-                        <option value="Bajo Stock">Bajo Stock</option>
-                        <option value="Agotado">Agotado</option>
-                    </select>
-                    <div class="mensaje-error" id="error-estado"></div>
-                </div>
-
-                <!-- Botones -->
-                <button type="submit" id="btn-submit" class="btn-submit">Guardar Producto</button>
-                <button type="reset">Limpiar Formulario</button>
-            </form>
-        </section>
-    </main>
-
-    <footer style="margin-bottom: auto;">
-        <div class="container">
-            <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+      <form id="formAltas">
+        <!-- Campos -->
+        <div class="grupo-campo">
+          <label for="nombre">Nombre/Descripción:</label>
+          <input type="text" id="nombre" required minlength="3" maxlength="100">
+          <div class="mensaje-error" id="error-nombre"></div>
         </div>
-        <div class="container">
-            <p>
-                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/altas.html" target="_blank">
-                    <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
-                </a>
-                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
-                    <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
-                </a>
-            </p>
+
+        <div class="grupo-campo">
+          <label for="categoria">Categoría:</label>
+          <input type="text" id="categoria" required>
+          <div class="mensaje-error" id="error-categoria"></div>
         </div>
-    </footer>
 
-    <!-- Incluir Validator.js desde CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.12.0/validator.min.js"></script>
-    
-    <script>
-        // Configuración inicial
-        const fechaInput = document.getElementById("fecha");
-        const hoy = new Date().toISOString().split("T")[0];
-        fechaInput.setAttribute("max", hoy);
+        <div class="grupo-campo">
+          <label for="tipo">Tipo:</label>
+          <input type="text" id="tipo" required>
+          <div class="mensaje-error" id="error-tipo"></div>
+        </div>
 
-        // Sistema de validación con Validator.js
-        class ValidadorFormulario {
-            constructor() {
-                this.campos = {};
-                this.camposValidos = 0;
-                this.totalCampos = 0;
-                this.inicializarValidaciones();
-            }
+        <div class="grupo-campo">
+          <label for="marca">Marca/Fabricante:</label>
+          <input type="text" id="marca" required>
+          <div class="mensaje-error" id="error-marca"></div>
+        </div>
 
-            inicializarValidaciones() {
-                // Configurar todos los campos
-                this.configurarCampo('nombre', this.validarNombre.bind(this));
-                this.configurarCampo('categoria', this.validarSoloLetras.bind(this));
-                this.configurarCampo('tipo', this.validarSoloLetras.bind(this));
-                this.configurarCampo('marca', this.validarMarca.bind(this));
-                this.configurarCampo('modelo', this.validarModelo.bind(this));
-                this.configurarCampo('proveedor', this.validarSoloLetras.bind(this));
-                this.configurarCampo('stock', this.validarStock.bind(this));
-                this.configurarCampo('precio', this.validarPrecio.bind(this));
-                this.configurarCampo('codigo', this.validarCodigo.bind(this));
-                this.configurarCampo('fecha', this.validarFecha.bind(this));
-                this.configurarCampo('estado', this.validarEstado.bind(this));
-                
-                this.totalCampos = Object.keys(this.campos).length;
-            }
+        <div class="grupo-campo">
+          <label for="proveedor">Proveedor:</label>
+          <input type="text" id="proveedor" required>
+          <div class="mensaje-error" id="error-proveedor"></div>
+        </div>
 
-            configurarCampo(id, validador) {
-                const campo = document.getElementById(id);
-                const error = document.getElementById(`error-${id}`);
+        <div class="grupo-campo">
+          <label for="stock">Cantidad en Stock:</label>
+          <input type="number" id="stock" required min="0" max="100000">
+          <div class="mensaje-error" id="error-stock"></div>
+        </div>
 
-                this.campos[id] = { elemento: campo, validador, error };
+        <div class="grupo-campo">
+          <label for="precio">Precio Unitario:</label>
+          <input type="number" id="precio" required min="0.01" step="0.01">
+          <div class="mensaje-error" id="error-precio"></div>
+        </div>
 
-                // Validación en tiempo real
-                campo.addEventListener('input', () => this.validarCampo(id));
-                campo.addEventListener('blur', () => this.validarCampo(id));
-                
-                // Para select, validar on change
-                if (campo.tagName === 'SELECT') {
-                    campo.addEventListener('change', () => this.validarCampo(id));
-                }
-            }
+        <div class="grupo-campo">
+          <label for="fecha">Fecha de Ingreso:</label>
+          <input type="date" id="fecha" required>
+          <div class="mensaje-error" id="error-fecha"></div>
+        </div>
 
-            validarCampo(id) {
-                const campo = this.campos[id];
-                const valor = campo.elemento.value.trim();
-                const resultado = campo.validador(valor, campo.elemento);
+        <div class="grupo-campo">
+          <label for="estado">Estado:</label>
+          <select id="estado" required>
+            <option value="">Seleccione una opción</option>
+            <option value="Disponible">Disponible</option>
+            <option value="Bajo Stock">Bajo Stock</option>
+            <option value="Agotado">Agotado</option>
+          </select>
+          <div class="mensaje-error" id="error-estado"></div>
+        </div>
 
-                this.mostrarEstadoCampo(id, resultado.valido, resultado.mensaje);
-                
-                // Actualizar contador de campos válidos
-                if (resultado.valido && valor !== '') {
-                    if (!campo.elemento.classList.contains('campo-valido')) {
-                        this.camposValidos++;
-                    }
-                } else {
-                    if (campo.elemento.classList.contains('campo-valido')) {
-                        this.camposValidos--;
-                    }
-                }
-                
-                this.actualizarProgreso();
-                return resultado.valido;
-            }
+        <!-- Imagen -->
+        <div class="grupo-campo">
+          <label for="imagen">Imagen del Producto:</label>
+          <div id="area-carga-imagen">
+            <button type="button" id="btn-seleccionar-imagen" class="btn-submit">Seleccionar Imagen</button>
+            <input type="file" id="imagen" accept="image/*" style="display:none;">
+            <img id="preview-imagen" class="preview-imagen" alt="Vista previa">
+            <div id="info-archivo" class="info-archivo"></div>
+            <button type="button" id="btn-eliminar-imagen" class="btn-eliminar-imagen">Eliminar Imagen</button>
+          </div>
+          <div class="mensaje-error" id="error-imagen">La imagen es obligatoria</div>
+        </div>
 
-            mostrarEstadoCampo(id, valido, mensaje = '') {
-                const campo = this.campos[id];
-                
-                // Limpiar clases anteriores
-                campo.elemento.classList.remove('campo-valido', 'campo-invalido');
-                campo.error.classList.remove('mostrar');
+        <button type="submit" id="btn-submit" class="btn-submit">Guardar Producto</button>
+        <button type="reset" id="btn-reset">Limpiar Formulario</button>
+      </form>
+    </section>
+  </main>
 
-                if (campo.elemento.value.trim() === '') {
-                    return; // No mostrar estado si está vacío
-                }
+  <footer>
+    <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+  </footer>
 
-                if (valido) {
-                    campo.elemento.classList.add('campo-valido');
-                } else {
-                    campo.elemento.classList.add('campo-invalido');
-                    campo.error.textContent = mensaje;
-                    campo.error.classList.add('mostrar');
-                }
-            }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.12.0/validator.min.js"></script>
+  <script>
+    const form = document.getElementById('formAltas');
+    const inputImagen = document.getElementById('imagen');
+    const previewImagen = document.getElementById('preview-imagen');
+    const infoArchivo = document.getElementById('info-archivo');
+    const errorImagen = document.getElementById('error-imagen');
+    const btnSeleccionarImagen = document.getElementById('btn-seleccionar-imagen');
+    const btnEliminarImagen = document.getElementById('btn-eliminar-imagen');
+    const btnReset = document.getElementById('btn-reset');
+    let imagenCargada = false;
 
-            actualizarProgreso() {
-                const progreso = document.getElementById('progreso-validacion');
-                const porcentaje = (this.camposValidos / this.totalCampos) * 100;
-                progreso.style.width = `${porcentaje}%`;
-            }
+    // Fecha máxima = hoy
+    const fechaInput = document.getElementById('fecha');
+    const hoy = new Date().toISOString().split('T')[0];
+    fechaInput.setAttribute('max', hoy);
 
-            // Validadores usando Validator.js
-            validarNombre(valor) {
-                if (!validator.isLength(valor, { min: 3, max: 100 })) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'El nombre debe tener entre 3 y 100 caracteres' 
-                    };
-                }
-                
-                if (!validator.matches(valor, /^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9.,\-_\s]+$/)) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Solo se permiten letras, números, puntos, comas y guiones' 
-                    };
-                }
-                
-                return { valido: true };
-            }
+    // --- Manejo de Imagen ---
+    btnSeleccionarImagen.addEventListener('click', () => inputImagen.click());
 
-            validarSoloLetras(valor) {
-                if (!validator.isLength(valor, { min: 3, max: 50 })) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Debe tener entre 3 y 50 caracteres' 
-                    };
-                }
-                
-                if (!validator.isAlpha(valor.replace(/\s/g, ''), 'es-ES')) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Solo se permiten letras y espacios' 
-                    };
-                }
-                
-                return { valido: true };
-            }
+    inputImagen.addEventListener('change', () => {
+      const archivo = inputImagen.files[0];
+      if (!archivo) return;
 
-            validarMarca(valor) {
-                if (!validator.isLength(valor, { min: 2, max: 50 })) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'La marca debe tener entre 2 y 50 caracteres' 
-                    };
-                }
-                
-                if (!validator.matches(valor, /^[A-Za-zÁÉÍÓÚáéíóúñÑ0-9\s\-]+$/)) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Solo letras, números, espacios y guiones' 
-                    };
-                }
-                
-                return { valido: true };
-            }
+      if (archivo.size > 5 * 1024 * 1024) {
+        alert('Tamaño máximo permitido: 5MB');
+        limpiarImagen();
+        return;
+      }
 
-            validarModelo(valor) {
-                if (valor && !validator.matches(valor, /^[A-Za-z0-9\-_.\s]{0,50}$/)) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Solo letras, números, guiones, puntos y espacios' 
-                    };
-                }
-                return { valido: true };
-            }
+      const lector = new FileReader();
+      lector.onload = e => {
+        previewImagen.src = e.target.result;
+        previewImagen.style.display = 'block';
+        infoArchivo.textContent = `Archivo: ${archivo.name} (${(archivo.size / 1024).toFixed(1)} KB)`;
+        imagenCargada = true;
+        errorImagen.classList.remove('mostrar');
+      };
+      lector.readAsDataURL(archivo);
+    });
 
-            validarStock(valor) {
-                if (!validator.isInt(valor, { min: 0, max: 100000 })) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'El stock debe ser un número entre 0 y 100,000' 
-                    };
-                }
-                return { valido: true };
-            }
+    btnEliminarImagen.addEventListener('click', limpiarImagen);
+    btnReset.addEventListener('click', limpiarImagen);
 
-            validarPrecio(valor) {
-                if (!validator.isFloat(valor, { min: 0.01 })) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'El precio debe ser un número mayor a 0' 
-                    };
-                }
-                return { valido: true };
-            }
+    function limpiarImagen() {
+      inputImagen.value = '';
+      previewImagen.src = '';
+      previewImagen.style.display = 'none';
+      infoArchivo.textContent = '';
+      imagenCargada = false;
+    }
 
-            validarCodigo(valor) {
-                if (valor && !validator.matches(valor, /^[A-Za-z0-9\-]{5,30}$/)) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'El código debe tener entre 5-30 caracteres alfanuméricos y guiones' 
-                    };
-                }
-                return { valido: true };
-            }
+    // --- Validación al enviar ---
+    form.addEventListener('submit', e => {
+      e.preventDefault();
 
-            validarFecha(valor) {
-                if (!validator.isDate(valor)) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Fecha inválida' 
-                    };
-                }
-                
-                const fecha = new Date(valor);
-                const hoy = new Date();
-                hoy.setHours(0, 0, 0, 0);
-                
-                if (fecha > hoy) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'La fecha no puede ser futura' 
-                    };
-                }
-                
-                return { valido: true };
-            }
+      if (!imagenCargada) {
+        alert('Debe seleccionar una imagen antes de enviar.');
+        errorImagen.classList.add('mostrar');
+        return;
+      }
 
-            validarEstado(valor) {
-                if (!validator.isIn(valor, ['Disponible', 'Bajo Stock', 'Agotado'])) {
-                    return { 
-                        valido: false, 
-                        mensaje: 'Debe seleccionar un estado válido' 
-                    };
-                }
-                return { valido: true };
-            }
-
-            validarFormularioCompleto() {
-                let formularioValido = true;
-                let primerError = null;
-
-                for (const id in this.campos) {
-                    const campo = this.campos[id];
-                    // Solo validar campos requeridos o con valor
-                    if (campo.elemento.required || campo.elemento.value.trim() !== '') {
-                        const valido = this.validarCampo(id);
-                        if (!valido && formularioValido) {
-                            formularioValido = false;
-                            primerError = campo.elemento;
-                        }
-                    }
-                }
-
-                if (!formularioValido && primerError) {
-                    primerError.focus();
-                    // Scroll suave al primer error
-                    primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-
-                return formularioValido;
-            }
-        }
-
-        // Inicializar validador
-        const validador = new ValidadorFormulario();
-
-        // Validación del formulario al enviar
-        document.getElementById("formAltas").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const btnSubmit = document.getElementById("btn-submit");
-            
-            // Deshabilitar botón para prevenir múltiples envíos
-            btnSubmit.disabled = true;
-            btnSubmit.textContent = 'Validando...';
-            this.classList.add('loading');
-
-            if (validador.validarFormularioCompleto()) {
-                // Simular procesamiento
-                setTimeout(() => {
-                    const nombre = document.getElementById('nombre').value;
-                    const categoria = document.getElementById('categoria').value;
-                    const precio = document.getElementById('precio').value;
-                    const stock = document.getElementById('stock').value;
-
-                    const confirmacion = confirm(
-                        "¿CONFIRMAR REGISTRO DEL PRODUCTO?\n\n" +
-                        `Producto: ${nombre}\n` +
-                        `Categoría: ${categoria}\n` +
-                        `Precio: $${parseFloat(precio).toFixed(2)}\n` +
-                        `Stock: ${stock} unidades\n\n` +
-                        "¿Desea guardar este producto en el catálogo?"
-                    );
-
-                    if (confirmacion) {
-                        alert("¡PRODUCTO REGISTRADO EXITOSAMENTE!\n\nEl producto ha sido agregado al catálogo en línea.");
-                        
-                        // Resetear formulario
-                        this.reset();
-                        
-                        // Resetear estados de validación
-                        document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => {
-                            el.classList.remove('campo-valido', 'campo-invalido');
-                        });
-                        document.querySelectorAll('.mensaje-error').forEach(error => {
-                            error.classList.remove('mostrar');
-                        });
-                        
-                        // Resetear progreso
-                        document.getElementById('progreso-validacion').style.width = '0%';
-                        validador.camposValidos = 0;
-                    }
-                    
-                    // Rehabilitar botón
-                    btnSubmit.disabled = false;
-                    btnSubmit.textContent = 'Guardar Producto';
-                    this.classList.remove('loading');
-                }, 1500);
-            } else {
-                alert("ERROR EN EL FORMULARIO\n\nPor favor, corrige los campos marcados en rojo antes de enviar.");
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = 'Guardar Producto';
-                this.classList.remove('loading');
-            }
-        });
-
-        // Limpiar validaciones al resetear
-        document.getElementById("formAltas").addEventListener("reset", function() {
-            setTimeout(() => {
-                document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => {
-                    el.classList.remove('campo-valido', 'campo-invalido');
-                });
-                document.querySelectorAll('.mensaje-error').forEach(error => {
-                    error.classList.remove('mostrar');
-                });
-                
-                // Resetear progreso
-                document.getElementById('progreso-validacion').style.width = '0%';
-                validador.camposValidos = 0;
-                
-                // Restaurar texto del botón
-                document.getElementById('btn-submit').textContent = 'Guardar Producto';
-            }, 0);
-        });
-
-        // Prevenir envío con Enter en campos individuales
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
-            });
-        });
-    </script>
+      alert('Producto registrado correctamente');
+      form.reset();
+      limpiarImagen();
+      document.querySelectorAll('.campo-valido').forEach(c => c.classList.remove('campo-valido'));
+    });
+  </script>
 </body>
 </html>
