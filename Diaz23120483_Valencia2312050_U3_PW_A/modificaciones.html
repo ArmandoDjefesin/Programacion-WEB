@@ -294,6 +294,28 @@
                         <div class="mensaje-error" id="error-estado">Seleccione un estado válido.</div>
                     </div>
 
+                    <div class="grupo-campo">
+                        <label for="imagen" class="campo-obligatorio">Imagen del Producto:</label>
+                        <div class="campo-imagen" id="area-carga-imagen">
+                            <div class="icono-carga">📷</div>
+                            <p>Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
+                            <input type="file" id="imagen" name="imagen" 
+                                accept="image/jpeg,image/png,image/gif,image/webp"
+                                style="display: none;">
+                            <button type="button" id="btn-seleccionar-imagen" class="btn-submit" style="margin: 10px 0;">
+                                Seleccionar Imagen
+                            </button>
+                            <img id="preview-imagen" class="preview-imagen" alt="Vista previa de la imagen">
+                            <div id="info-archivo" class="info-archivo"></div>
+                            <button type="button" id="btn-eliminar-imagen" class="btn-eliminar-imagen">
+                                Eliminar Imagen
+                            </button>
+                        </div>
+                        <span class="texto-ayuda">Formatos permitidos: JPG, PNG, GIF, WebP (máx. 5MB)</span>
+                        <div class="mensaje-error" id="error-imagen">La imagen es obligatoria</div>
+                    </div>
+
+
                     <div class="grupo-botones">
                         <button type="submit" id="btn-modificar" class="btn btn-success">Guardar Cambios</button>
                         <button type="reset" class="btn btn-secondary">Cancelar</button>
@@ -319,174 +341,55 @@
         </div>
     </footer>
 
-    <script>
-        // --- ELEMENTOS ---
-        const formBuscar = document.getElementById('formBuscar');
-        const formModificar = document.getElementById('formModificar');
-        const idProductoBuscar = document.getElementById('id_producto');
-        const btnBuscar = document.getElementById('btn-buscar');
-        const btnModificar = document.getElementById('btn-modificar');
-        const seccionModificar = document.getElementById('seccion-modificar');
-        const productoEncontrado = document.getElementById('producto-encontrado');
-        const infoProducto = document.getElementById('info-producto');
+<script>
+    // --- ELEMENTOS ---
+    const formBuscar = document.getElementById('formBuscar');
+    const formModificar = document.getElementById('formModificar');
+    const idProductoBuscar = document.getElementById('id_producto');
+    const btnBuscar = document.getElementById('btn-buscar');
+    const btnModificar = document.getElementById('btn-modificar');
+    const seccionModificar = document.getElementById('seccion-modificar');
+    const productoEncontrado = document.getElementById('producto-encontrado');
+    const infoProducto = document.getElementById('info-producto');
 
-        // --- VALIDACIÓN VISUAL EN TIEMPO REAL ---
-        function validarCampo(input, condicionValida, idError) {
-            const error = document.getElementById(idError);
-            if (condicionValida) {
-                input.classList.remove('campo-invalido');
-                input.classList.add('campo-valido');
-                error.classList.remove('mostrar');
-                return true;
-            } else {
-                input.classList.remove('campo-valido');
-                input.classList.add('campo-invalido');
-                error.classList.add('mostrar');
-                return false;
-            }
+    // --- VALIDACIÓN VISUAL EN TIEMPO REAL ---
+    function validarCampo(input, condicionValida, idError) {
+        const error = document.getElementById(idError);
+        if (condicionValida) {
+            input.classList.remove('campo-invalido');
+            input.classList.add('campo-valido');
+            error.classList.remove('mostrar');
+            return true;
+        } else {
+            input.classList.remove('campo-valido');
+            input.classList.add('campo-invalido');
+            error.classList.add('mostrar');
+            return false;
         }
+    }
 
-        // Validación ID Producto (Búsqueda)
-        idProductoBuscar.addEventListener('input', () => {
-            const regex = /^[A-Za-z0-9\-_]+$/;
-            validarCampo(idProductoBuscar, regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 'error-buscar-id');
-        });
+    // Validación ID Producto (Búsqueda)
+    idProductoBuscar.addEventListener('input', () => {
+        const regex = /^[A-Za-z0-9\-_]+$/;
+        validarCampo(idProductoBuscar, regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 'error-buscar-id');
+    });
 
-        // Validaciones para formulario de modificación
-        const camposModificar = [
-            { id: 'nombre', min: 3, max: 100, required: true },
-            { id: 'categoria', min: 3, max: 50, required: true },
-            { id: 'tipo', min: 2, max: 50, required: true },
-            { id: 'marca', min: 2, max: 50, required: true },
-            { id: 'modelo', min: 0, max: 50, required: false },
-            { id: 'proveedor', min: 3, max: 100, required: true },
-            { id: 'codigo', min: 0, max: 30, required: false }
-        ];
+    // Validaciones para formulario de modificación
+    const camposModificar = [
+        { id: 'nombre', min: 3, max: 100, required: true },
+        { id: 'categoria', min: 3, max: 50, required: true },
+        { id: 'tipo', min: 2, max: 50, required: true },
+        { id: 'marca', min: 2, max: 50, required: true },
+        { id: 'modelo', min: 0, max: 50, required: false },
+        { id: 'proveedor', min: 3, max: 100, required: true },
+        { id: 'codigo', min: 0, max: 30, required: false }
+    ];
 
-        // Configurar validaciones en tiempo real para cada campo
-        camposModificar.forEach(campo => {
-            const elemento = document.getElementById(campo.id);
-            if (elemento) {
-                elemento.addEventListener('input', () => {
-                    const valor = elemento.value.trim();
-                    let valido = true;
-                    
-                    if (campo.required && valor === '') {
-                        valido = false;
-                    } else if (valor !== '' && (valor.length < campo.min || valor.length > campo.max)) {
-                        valido = false;
-                    }
-                    
-                    validarCampo(elemento, valido, `error-${campo.id}`);
-                });
-            }
-        });
-
-        // Validación Stock
-        document.getElementById('stock').addEventListener('input', function() {
-            const valor = parseInt(this.value);
-            const valido = !isNaN(valor) && valor >= 0 && valor <= 100000;
-            validarCampo(this, valido, 'error-stock');
-        });
-
-        // Validación Precio
-        document.getElementById('precio').addEventListener('input', function() {
-            const valor = parseFloat(this.value);
-            const valido = !isNaN(valor) && valor >= 0.01;
-            validarCampo(this, valido, 'error-precio');
-        });
-
-        // Validación Fecha
-        document.getElementById('fecha').addEventListener('change', function() {
-            const fecha = new Date(this.value);
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            const valido = this.value && fecha <= hoy;
-            validarCampo(this, valido, 'error-fecha');
-        });
-
-        // Validación Estado
-        document.getElementById('estado').addEventListener('change', function() {
-            validarCampo(this, this.value !== '', 'error-estado');
-        });
-
-        // Configurar fecha máxima como hoy
-        const fechaInput = document.getElementById("fecha");
-        const hoy = new Date().toISOString().split("T")[0];
-        fechaInput.setAttribute("max", hoy);
-
-        // --- BÚSQUEDA DE PRODUCTO ---
-        btnBuscar.addEventListener('click', () => {
-            const regex = /^[A-Za-z0-9\-_]+$/;
-            const idValido = validarCampo(idProductoBuscar, 
-                regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 
-                'error-buscar-id'
-            );
-
-            if (!idValido) {
-                alert('Ingrese un ID válido para buscar.');
-                return;
-            }
-
-            // Simular búsqueda en base de datos
-            btnBuscar.disabled = true;
-            btnBuscar.textContent = 'Buscando...';
-
-            setTimeout(() => {
-                // Simular producto encontrado
-                const productoSimulado = {
-                    nombre: "Laptop Gaming HP Pavilion",
-                    categoria: "Electrónicos",
-                    tipo: "Laptop",
-                    marca: "HP",
-                    modelo: "15-dw1000la",
-                    proveedor: "Distribuidora Tech S.A.",
-                    stock: 15,
-                    precio: 1250.99,
-                    codigo: "LIC-GAMING-2024",
-                    fecha: "2024-01-15",
-                    estado: "Disponible"
-                };
-
-                // Llenar formulario con datos simulados
-                document.getElementById('nombre').value = productoSimulado.nombre;
-                document.getElementById('categoria').value = productoSimulado.categoria;
-                document.getElementById('tipo').value = productoSimulado.tipo;
-                document.getElementById('marca').value = productoSimulado.marca;
-                document.getElementById('modelo').value = productoSimulado.modelo;
-                document.getElementById('proveedor').value = productoSimulado.proveedor;
-                document.getElementById('stock').value = productoSimulado.stock;
-                document.getElementById('precio').value = productoSimulado.precio;
-                document.getElementById('codigo').value = productoSimulado.codigo;
-                document.getElementById('fecha').value = productoSimulado.fecha;
-                document.getElementById('estado').value = productoSimulado.estado;
-
-                // Mostrar información del producto encontrado
-                infoProducto.textContent = `Producto: ${productoSimulado.nombre} | Categoría: ${productoSimulado.categoria} | Stock: ${productoSimulado.stock} | Precio: $${productoSimulado.precio}`;
-                
-                // Mostrar secciones
-                productoEncontrado.classList.add('mostrar');
-                seccionModificar.style.display = 'block';
-
-                // Restaurar botón
-                btnBuscar.disabled = false;
-                btnBuscar.textContent = 'Buscar Producto';
-
-                alert(`Producto encontrado:\n\nID: ${idProductoBuscar.value}\nNombre: ${productoSimulado.nombre}\nPrecio: $${productoSimulado.precio}`);
-
-            }, 1000);
-        });
-
-        // --- MODIFICACIÓN DE PRODUCTO ---
-        formModificar.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Validar todos los campos
-            let formularioValido = true;
-
-            // Validar campos de texto
-            camposModificar.forEach(campo => {
-                const elemento = document.getElementById(campo.id);
+    // Configurar validaciones en tiempo real
+    camposModificar.forEach(campo => {
+        const elemento = document.getElementById(campo.id);
+        if (elemento) {
+            elemento.addEventListener('input', () => {
                 const valor = elemento.value.trim();
                 let valido = true;
                 
@@ -496,114 +399,266 @@
                     valido = false;
                 }
                 
-                if (!validarCampo(elemento, valido, `error-${campo.id}`)) {
-                    formularioValido = false;
-                }
+                validarCampo(elemento, valido, `error-${campo.id}`);
             });
+        }
+    });
 
-            // Validar stock
-            const stock = document.getElementById('stock');
-            const stockValido = !isNaN(parseInt(stock.value)) && parseInt(stock.value) >= 0 && parseInt(stock.value) <= 100000;
-            if (!validarCampo(stock, stockValido, 'error-stock')) {
-                formularioValido = false;
-            }
+    // Validación Stock
+    document.getElementById('stock').addEventListener('input', function() {
+        const valor = parseInt(this.value);
+        const valido = !isNaN(valor) && valor >= 0 && valor <= 100000;
+        validarCampo(this, valido, 'error-stock');
+    });
 
-            // Validar precio
-            const precio = document.getElementById('precio');
-            const precioValido = !isNaN(parseFloat(precio.value)) && parseFloat(precio.value) >= 0.01;
-            if (!validarCampo(precio, precioValido, 'error-precio')) {
-                formularioValido = false;
-            }
+    // Validación Precio
+    document.getElementById('precio').addEventListener('input', function() {
+        const valor = parseFloat(this.value);
+        const valido = !isNaN(valor) && valor >= 0.01;
+        validarCampo(this, valido, 'error-precio');
+    });
 
-            // Validar fecha
-            const fecha = document.getElementById('fecha');
-            const fechaVal = new Date(fecha.value);
-            const hoy = new Date();
-            hoy.setHours(0, 0, 0, 0);
-            const fechaValida = fecha.value && fechaVal <= hoy;
-            if (!validarCampo(fecha, fechaValida, 'error-fecha')) {
-                formularioValido = false;
-            }
+    // Validación Fecha
+    document.getElementById('fecha').addEventListener('change', function() {
+        const fecha = new Date(this.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const valido = this.value && fecha <= hoy;
+        validarCampo(this, valido, 'error-fecha');
+    });
 
-            // Validar estado
-            const estado = document.getElementById('estado');
-            if (!validarCampo(estado, estado.value !== '', 'error-estado')) {
-                formularioValido = false;
-            }
+    // Validación Estado
+    document.getElementById('estado').addEventListener('change', function() {
+        validarCampo(this, this.value !== '', 'error-estado');
+    });
 
-            if (!formularioValido) {
-                alert('Complete correctamente todos los campos obligatorios.');
+    // Configurar fecha máxima como hoy
+    const fechaInput = document.getElementById("fecha");
+    const hoy = new Date().toISOString().split("T")[0];
+    fechaInput.setAttribute("max", hoy);
+
+    // --- BÚSQUEDA DE PRODUCTO ---
+    btnBuscar.addEventListener('click', () => {
+        const regex = /^[A-Za-z0-9\-_]+$/;
+        const idValido = validarCampo(idProductoBuscar, 
+            regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 
+            'error-buscar-id'
+        );
+
+        if (!idValido) {
+            alert('Ingrese un ID válido para buscar.');
+            return;
+        }
+
+        btnBuscar.disabled = true;
+        btnBuscar.textContent = 'Buscando...';
+
+        setTimeout(() => {
+            const productoSimulado = {
+                nombre: "Laptop Gaming HP Pavilion",
+                categoria: "Electrónicos",
+                tipo: "Laptop",
+                marca: "HP",
+                modelo: "15-dw1000la",
+                proveedor: "Distribuidora Tech S.A.",
+                stock: 15,
+                precio: 1250.99,
+                codigo: "LIC-GAMING-2024",
+                fecha: "2024-01-15",
+                estado: "Disponible"
+            };
+
+            document.getElementById('nombre').value = productoSimulado.nombre;
+            document.getElementById('categoria').value = productoSimulado.categoria;
+            document.getElementById('tipo').value = productoSimulado.tipo;
+            document.getElementById('marca').value = productoSimulado.marca;
+            document.getElementById('modelo').value = productoSimulado.modelo;
+            document.getElementById('proveedor').value = productoSimulado.proveedor;
+            document.getElementById('stock').value = productoSimulado.stock;
+            document.getElementById('precio').value = productoSimulado.precio;
+            document.getElementById('codigo').value = productoSimulado.codigo;
+            document.getElementById('fecha').value = productoSimulado.fecha;
+            document.getElementById('estado').value = productoSimulado.estado;
+
+            infoProducto.textContent = `Producto: ${productoSimulado.nombre} | Categoría: ${productoSimulado.categoria} | Stock: ${productoSimulado.stock} | Precio: $${productoSimulado.precio}`;
+            productoEncontrado.classList.add('mostrar');
+            seccionModificar.style.display = 'block';
+
+            btnBuscar.disabled = false;
+            btnBuscar.textContent = 'Buscar Producto';
+
+            alert(`Producto encontrado:\n\nID: ${idProductoBuscar.value}\nNombre: ${productoSimulado.nombre}\nPrecio: $${productoSimulado.precio}`);
+        }, 1000);
+    });
+
+    // --- VALIDACIÓN Y PREVISUALIZACIÓN DE IMAGEN ---
+    const inputImagen = document.getElementById('imagen');
+    const btnSeleccionarImagen = document.getElementById('btn-seleccionar-imagen');
+    const previewImagen = document.getElementById('preview-imagen');
+    const infoArchivo = document.getElementById('info-archivo');
+    const btnEliminarImagen = document.getElementById('btn-eliminar-imagen');
+    const areaCargaImagen = document.getElementById('area-carga-imagen');
+    const errorImagen = document.getElementById('error-imagen');
+    let imagenCargada = false;
+
+    btnSeleccionarImagen.addEventListener('click', () => inputImagen.click());
+
+    inputImagen.addEventListener('change', () => {
+        const archivo = inputImagen.files[0];
+        if (archivo) {
+            const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!tiposPermitidos.includes(archivo.type)) {
+                alert('Formato de imagen no permitido. Solo JPG, PNG, GIF, WebP.');
+                inputImagen.value = '';
                 return;
             }
+            if (archivo.size > 5 * 1024 * 1024) {
+                alert('La imagen no debe superar los 5MB.');
+                inputImagen.value = '';
+                return;
+            }
+            const lector = new FileReader();
+            lector.onload = e => {
+                previewImagen.src = e.target.result;
+                previewImagen.style.display = 'block';
+                infoArchivo.textContent = `Archivo: ${archivo.name} (${(archivo.size / 1024).toFixed(1)} KB)`;
+                imagenCargada = true;
+                errorImagen.classList.remove('mostrar');
+            };
+            lector.readAsDataURL(archivo);
+        }
+    });
 
-            // Cambiar estado del botón
-            btnModificar.disabled = true;
-            btnModificar.textContent = 'Guardando...';
-            formModificar.classList.add('loading');
+    btnEliminarImagen.addEventListener('click', () => {
+        inputImagen.value = '';
+        previewImagen.src = '';
+        previewImagen.style.display = 'none';
+        infoArchivo.textContent = '';
+        imagenCargada = false;
+    });
 
-            // Mostrar confirmación
-            const confirmacionModificar = confirm(
-                `CONFIRMAR MODIFICACIÓN\n\n` +
-                `ID del Producto: ${idProductoBuscar.value}\n` +
-                `Nuevo Nombre: ${document.getElementById('nombre').value}\n` +
-                `Nuevo Precio: $${parseFloat(document.getElementById('precio').value).toFixed(2)}\n` +
-                `Nuevo Stock: ${document.getElementById('stock').value}\n` +
-                `Nuevo Estado: ${document.getElementById('estado').value}\n\n` +
-                `¿Desea guardar los cambios en este producto?`
-            );
+    // Arrastrar y soltar imagen
+    areaCargaImagen.addEventListener('dragover', e => e.preventDefault());
+    areaCargaImagen.addEventListener('drop', e => {
+        e.preventDefault();
+        const archivo = e.dataTransfer.files[0];
+        inputImagen.files = e.dataTransfer.files;
+        inputImagen.dispatchEvent(new Event('change'));
+    });
 
-            if (confirmacionModificar) {
-                // Simular guardado
-                setTimeout(() => {
-                    // Mostrar alerta de éxito
-                    alert(
-                        `¡MODIFICACIÓN EXITOSA!\n\n` +
-                        `El producto "${document.getElementById('nombre').value}" ha sido actualizado correctamente.\n\n` +
-                        `Estado: Cambios guardados en el sistema\n` +
-                        `ID: ${idProductoBuscar.value}\n` +
-                        `Fecha de modificación: ${new Date().toLocaleDateString()}`
-                    );
+    // --- MODIFICACIÓN DE PRODUCTO ---
+    formModificar.addEventListener('submit', (e) => {
 
-                    // Restaurar botón
-                    btnModificar.disabled = false;
-                    btnModificar.textContent = 'Guardar Cambios';
-                    formModificar.classList.remove('loading');
+        e.preventDefault();
 
-                    window.location.href = "modificaciones.html";
+    // --- VALIDAR IMAGEN PRIMERO ---
+    if (!imagenCargada) {
+        // Mostrar mensaje visual
+        errorImagen.textContent = "La imagen es obligatoria. Por favor selecciona una imagen.";
+        errorImagen.classList.add('mostrar');
 
-                }, 1000);
-            } else {
-                // Restaurar botón si cancela
+        // Cambiar borde del área de carga para resaltar
+        areaCargaImagen.style.border = "2px solid red";
+
+        // Opcional: desplazar al área de imagen
+        areaCargaImagen.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        return; // detiene envío
+    } else {
+        // Restaurar estilo si hay imagen
+        errorImagen.classList.remove('mostrar');
+        areaCargaImagen.style.border = "2px dashed #ccc"; // o tu estilo original
+    }
+
+        let formularioValido = true;
+
+        // Validar todos los campos existentes...
+        camposModificar.forEach(campo => {
+            const elemento = document.getElementById(campo.id);
+            const valor = elemento.value.trim();
+            let valido = true;
+            if (campo.required && valor === '') {
+                valido = false;
+            } else if (valor !== '' && (valor.length < campo.min || valor.length > campo.max)) {
+                valido = false;
+            }
+            if (!validarCampo(elemento, valido, `error-${campo.id}`)) formularioValido = false;
+        });
+
+        // Validaciones numéricas
+        const stock = document.getElementById('stock');
+        const stockValido = !isNaN(parseInt(stock.value)) && parseInt(stock.value) >= 0 && parseInt(stock.value) <= 100000;
+        if (!validarCampo(stock, stockValido, 'error-stock')) formularioValido = false;
+
+        const precio = document.getElementById('precio');
+        const precioValido = !isNaN(parseFloat(precio.value)) && parseFloat(precio.value) >= 0.01;
+        if (!validarCampo(precio, precioValido, 'error-precio')) formularioValido = false;
+
+        const fecha = document.getElementById('fecha');
+        const fechaVal = new Date(fecha.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const fechaValida = fecha.value && fechaVal <= hoy;
+        if (!validarCampo(fecha, fechaValida, 'error-fecha')) formularioValido = false;
+
+        const estado = document.getElementById('estado');
+        if (!validarCampo(estado, estado.value !== '', 'error-estado')) formularioValido = false;
+
+        if (!formularioValido) {
+            alert('Complete correctamente todos los campos obligatorios, incluyendo la imagen.');
+            return; // Detiene el envío
+        }
+
+
+        // Confirmar
+        btnModificar.disabled = true;
+        btnModificar.textContent = 'Guardando...';
+
+        const confirmacionModificar = confirm(
+            `CONFIRMAR MODIFICACIÓN\n\n` +
+            `ID: ${idProductoBuscar.value}\n` +
+            `Nombre: ${document.getElementById('nombre').value}\n` +
+            `Precio: $${parseFloat(document.getElementById('precio').value).toFixed(2)}\n` +
+            `Stock: ${document.getElementById('stock').value}\n` +
+            `Estado: ${document.getElementById('estado').value}\n\n` +
+            `¿Desea guardar los cambios?`
+        );
+
+        if (confirmacionModificar) {
+            setTimeout(() => {
+                alert(`¡MODIFICACIÓN EXITOSA!\n\nEl producto ha sido actualizado correctamente.`);
                 btnModificar.disabled = false;
                 btnModificar.textContent = 'Guardar Cambios';
-                formModificar.classList.remove('loading');
-            }
-        });
+                window.location.href = "modificaciones.html";
+            }, 1000);
+        } else {
+            btnModificar.disabled = false;
+            btnModificar.textContent = 'Guardar Cambios';
+        }
+    });
 
-        // --- BOTÓN CANCELAR ---
-        formModificar.addEventListener('reset', () => {
-            setTimeout(() => {
-                // Limpiar estilos de validación
-                document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => {
-                    el.classList.remove('campo-valido', 'campo-invalido');
-                });
-                document.querySelectorAll('.mensaje-error').forEach(error => {
-                    error.classList.remove('mostrar');
-                });
-                
-                // Restaurar texto del botón
-                btnModificar.textContent = '💾 Guardar Cambios';
-            }, 0);
-        });
+    // --- BOTÓN CANCELAR ---
+    formModificar.addEventListener('reset', () => {
+        setTimeout(() => {
+            document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => el.classList.remove('campo-valido', 'campo-invalido'));
+            document.querySelectorAll('.mensaje-error').forEach(error => error.classList.remove('mostrar'));
+            btnModificar.textContent = '💾 Guardar Cambios';
+            inputImagen.value = '';
+            previewImagen.src = '';
+            previewImagen.style.display = 'none';
+            infoArchivo.textContent = '';
+            imagenCargada = false;
+        }, 0);
+    });
 
-        // Prevenir envío con Enter en campos individuales
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
-            });
+    // Prevenir envío con Enter
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('keypress', e => {
+            if (e.key === 'Enter') e.preventDefault();
         });
-    </script>
+    });
+</script>
+
+
 </body>
 </html>
