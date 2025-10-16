@@ -135,3 +135,43 @@ button:hover {
         font-size: 1.4rem;
     }
 }
+
+/* ---- Carga de Imagen ---- */
+.campo-imagen {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+.campo-imagen:hover {
+    border-color: #4cc9f0;
+}
+
+.preview-imagen {
+    display: none;
+    max-width: 200px;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.campo-valido {
+    border-color: #4cc9f0 !important;
+}
+
+.campo-invalido {
+    border-color: #ff595e !important;
+    background-color: #ffecec;
+}
+
+.error {
+    color: #ff595e;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.error.mostrar {
+    display: block;
+}
