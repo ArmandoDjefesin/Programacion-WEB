@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="formulario.css">
+    <title>Modificaciones - Omnipotent Tech</title>
+    <style>
+        /* --- ESTILOS DE VALIDACIÓN --- */
+        .campo-valido {
+            border-color: #28a745 !important;
+            background-color: #f8fff9;
+        }
+        .campo-invalido {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+        .mensaje-error {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .mensaje-error.mostrar {
+            display: block;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .grupo-campo {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-submit:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        /* --- BOTONES --- */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            margin: 5px;
+        }
+        
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #1e7e34;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-1px);
+        }
+        
+        .grupo-botones {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* --- FORMULARIO --- */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        select {
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* --- SECCIONES DEL FORMULARIO --- */
+        .seccion-formulario {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .seccion-formulario h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+        }
+        
+        /* --- ESTADO PRODUCTO ENCONTRADO --- */
+        .producto-encontrado {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .producto-encontrado.mostrar {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Modificación de Productos y Servicios</h1>
+        <nav>
+            <a href="index.html" style="color: #ffc107; text-decoration: none;">🏠 Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Buscar y modificar</h2>
+            
+            <!-- Sección de búsqueda -->
+            <div class="seccion-formulario">
+                <h3>Buscar Producto</h3>
+                <form id="formBuscar">
+                    <div class="grupo-campo">
+                        <label for="id_producto">ID del Producto:</label>
+                        <input type="text" id="id_producto" name="id_producto" 
+                            placeholder="Ej: PROD-001, SERV-2024" required 
+                            minlength="3" maxlength="20"
+                            pattern="^[A-Za-z0-9\-_]+$">
+                        <div class="mensaje-error" id="error-buscar-id">Ingrese un ID válido (solo letras, números, guiones o guiones bajos).</div>
+                    </div>
+                    <button type="button" id="btn-buscar" class="btn btn-primary">Buscar Producto</button>
+                </form>
+            </div>
+
+            <!-- Mensaje producto encontrado -->
+            <div id="producto-encontrado" class="producto-encontrado">
+                <h4>Producto Encontrado</h4>
+                <p id="info-producto">Listo para modificar...</p>
+            </div>
+
+            <!-- Sección de modificación -->
+            <div class="seccion-formulario" id="seccion-modificar" style="display: none;">
+                <h3>Modificar Producto</h3>
+                <form id="formModificar">
+                    <!-- Nombre / Descripción -->
+                    <div class="grupo-campo">
+                        <label for="nombre">Nombre/Descripción:</label>
+                        <input type="text" id="nombre" name="nombre" 
+                            required minlength="3" maxlength="100"
+                            placeholder="Ej: Laptop Gaming HP Pavilion">
+                        <div class="mensaje-error" id="error-nombre">El nombre debe tener entre 3 y 100 caracteres.</div>
+                    </div>
+
+                    <!-- Categoría -->
+                    <div class="grupo-campo">
+                        <label for="categoria">Categoría:</label>
+                        <input type="text" id="categoria" name="categoria" 
+                            required minlength="3" maxlength="50"
+                            placeholder="Ej: Electrónicos">
+                        <div class="mensaje-error" id="error-categoria">La categoría debe tener entre 3 y 50 caracteres.</div>
+                    </div>
+
+                    <!-- Tipo -->
+                    <div class="grupo-campo">
+                        <label for="tipo">Tipo:</label>
+                        <input type="text" id="tipo" name="tipo" 
+                            required minlength="2" maxlength="50"
+                            placeholder="Ej: Laptop">
+                        <div class="mensaje-error" id="error-tipo">El tipo debe tener entre 2 y 50 caracteres.</div>
+                    </div>
+
+                    <!-- Marca -->
+                    <div class="grupo-campo">
+                        <label for="marca">Marca/Fabricante:</label>
+                        <input type="text" id="marca" name="marca"
+                            required minlength="2" maxlength="50"
+                            placeholder="Ej: HP">
+                        <div class="mensaje-error" id="error-marca">La marca debe tener entre 2 y 50 caracteres.</div>
+                    </div>
+
+                    <!-- Modelo -->
+                    <div class="grupo-campo">
+                        <label for="modelo">Modelo/Versión:</label>
+                        <input type="text" id="modelo" name="modelo"
+                            maxlength="50"
+                            placeholder="Ej: 15-dw1000la (opcional)">
+                        <div class="mensaje-error" id="error-modelo">El modelo no debe exceder 50 caracteres.</div>
+                    </div>
+
+                    <!-- Proveedor -->
+                    <div class="grupo-campo">
+                        <label for="proveedor">Proveedor:</label>
+                        <input type="text" id="proveedor" name="proveedor"
+                            required minlength="3" maxlength="100"
+                            placeholder="Ej: Distribuidora Tech S.A.">
+                        <div class="mensaje-error" id="error-proveedor">El proveedor debe tener entre 3 y 100 caracteres.</div>
+                    </div>
+
+                    <!-- Stock -->
+                    <div class="grupo-campo">
+                        <label for="stock">Cantidad en Stock:</label>
+                        <input type="number" id="stock" name="stock" 
+                            required min="0" max="100000"
+                            placeholder="0">
+                        <div class="mensaje-error" id="error-stock">El stock debe ser un número entre 0 y 100,000.</div>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="grupo-campo">
+                        <label for="precio">Precio Unitario:</label>
+                        <input type="number" id="precio" name="precio" 
+                            required min="0.01" step="0.01"
+                            placeholder="0.00">
+                        <div class="mensaje-error" id="error-precio">El precio debe ser mayor a 0.</div>
+                    </div>
+
+                    <!-- Código -->
+                    <div class="grupo-campo">
+                        <label for="codigo">Código de Licencia:</label>
+                        <input type="text" id="codigo" name="codigo"
+                            maxlength="30"
+                            placeholder="Ej: LIC-2024-ABC123 (opcional)">
+                        <div class="mensaje-error" id="error-codigo">El código no debe exceder 30 caracteres.</div>
+                    </div>
+
+                    <!-- Fecha -->
+                    <div class="grupo-campo">
+                        <label for="fecha">Fecha de Ingreso:</label>
+                        <input type="date" id="fecha" name="fecha" required>
+                        <div class="mensaje-error" id="error-fecha">Seleccione una fecha válida.</div>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="grupo-campo">
+                        <label for="estado">Estado:</label>
+                        <select id="estado" name="estado" required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="Disponible">Disponible</option>
+                            <option value="Bajo Stock">Bajo Stock</option>
+                            <option value="Agotado">Agotado</option>
+                        </select>
+                        <div class="mensaje-error" id="error-estado">Seleccione un estado válido.</div>
+                    </div>
+
+                    <div class="grupo-campo">
+                        <label for="imagen" class="campo-obligatorio">Imagen del Producto:</label>
+                        <div class="campo-imagen" id="area-carga-imagen">
+                            <div class="icono-carga">📷</div>
+                            <p>Arrastra y suelta una imagen aquí o haz clic para seleccionar</p>
+                            <input type="file" id="imagen" name="imagen" 
+                                accept="image/jpeg,image/png,image/gif,image/webp"
+                                style="display: none;">
+                            <button type="button" id="btn-seleccionar-imagen" class="btn-submit" style="margin: 10px 0;">
+                                Seleccionar Imagen
+                            </button>
+                            <img id="preview-imagen" class="preview-imagen" alt="Vista previa de la imagen" src="data:image/jpeg;base64,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">
+                            <div id="info-archivo" class="info-archivo"></div>
+                            <button type="button" id="btn-eliminar-imagen" class="btn-eliminar-imagen">
+                                Eliminar Imagen
+                            </button>
+                        </div>
+                        <span class="texto-ayuda">Formatos permitidos: JPG, PNG, GIF, WebP (máx. 5MB)</span>
+                        <div class="mensaje-error" id="error-imagen">La imagen es obligatoria</div>
+                    </div>
+
+
+                    <div class="grupo-botones">
+                        <button type="submit" id="btn-modificar" class="btn btn-success">Guardar Cambios</button>
+                        <button type="reset" class="btn btn-secondary">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer style="margin-bottom: auto;">
+        <div class="container">
+            <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+        </div>
+        <div class="container">
+            <p>
+                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/modificaciones.html" target="_blank">
+                    <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
+                </a>
+                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
+                    <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
+                </a>
+            </p>
+        </div>
+    </footer>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.12.0/validator.min.js"></script>
+<script>
+    // --- ELEMENTOS ---
+    const formBuscar = document.getElementById('formBuscar');
+    const formModificar = document.getElementById('formModificar');
+    const idProductoBuscar = document.getElementById('id_producto');
+    const btnBuscar = document.getElementById('btn-buscar');
+    const btnModificar = document.getElementById('btn-modificar');
+    const seccionModificar = document.getElementById('seccion-modificar');
+    const productoEncontrado = document.getElementById('producto-encontrado');
+    const infoProducto = document.getElementById('info-producto');
+
+    // --- VALIDACIÓN VISUAL EN TIEMPO REAL ---
+    function validarCampo(input, condicionValida, idError) {
+        const error = document.getElementById(idError);
+        if (condicionValida) {
+            input.classList.remove('campo-invalido');
+            input.classList.add('campo-valido');
+            error.classList.remove('mostrar');
+            return true;
+        } else {
+            input.classList.remove('campo-valido');
+            input.classList.add('campo-invalido');
+            error.classList.add('mostrar');
+            return false;
+        }
+    }
+
+    // Validación ID Producto (Búsqueda)
+    idProductoBuscar.addEventListener('input', () => {
+        const regex = /^[A-Za-z0-9\-_]+$/;
+        validarCampo(idProductoBuscar, regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 'error-buscar-id');
+    });
+
+    // Validaciones para formulario de modificación
+    const camposModificar = [
+        { id: 'nombre', min: 3, max: 100, required: true },
+        { id: 'categoria', min: 3, max: 50, required: true },
+        { id: 'tipo', min: 2, max: 50, required: true },
+        { id: 'marca', min: 2, max: 50, required: true },
+        { id: 'modelo', min: 0, max: 50, required: false },
+        { id: 'proveedor', min: 3, max: 100, required: true },
+        { id: 'codigo', min: 0, max: 30, required: false }
+    ];
+
+    // Configurar validaciones en tiempo real
+    camposModificar.forEach(campo => {
+        const elemento = document.getElementById(campo.id);
+        if (elemento) {
+            elemento.addEventListener('input', () => {
+                const valor = elemento.value.trim();
+                let valido = true;
+                
+                if (campo.required && valor === '') {
+                    valido = false;
+                } else if (valor !== '' && (valor.length < campo.min || valor.length > campo.max)) {
+                    valido = false;
+                }
+                
+                validarCampo(elemento, valido, `error-${campo.id}`);
+            });
+        }
+    });
+
+    // Validación Stock
+    document.getElementById('stock').addEventListener('input', function() {
+        const valor = parseInt(this.value);
+        const valido = !isNaN(valor) && valor >= 0 && valor <= 100000;
+        validarCampo(this, valido, 'error-stock');
+    });
+
+    // Validación Precio
+    document.getElementById('precio').addEventListener('input', function() {
+        const valor = parseFloat(this.value);
+        const valido = !isNaN(valor) && valor >= 0.01;
+        validarCampo(this, valido, 'error-precio');
+    });
+
+    // Validación Fecha
+    document.getElementById('fecha').addEventListener('change', function() {
+        const fecha = new Date(this.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const valido = this.value && fecha <= hoy;
+        validarCampo(this, valido, 'error-fecha');
+    });
+
+    // Validación Estado
+    document.getElementById('estado').addEventListener('change', function() {
+        validarCampo(this, this.value !== '', 'error-estado');
+    });
+
+    // Configurar fecha máxima como hoy
+    const fechaInput = document.getElementById("fecha");
+    const hoy = new Date().toISOString().split("T")[0];
+    fechaInput.setAttribute("max", hoy);
+
+    // --- BÚSQUEDA DE PRODUCTO ---
+    btnBuscar.addEventListener('click', () => {
+        const regex = /^[A-Za-z0-9\-_]+$/;
+        const idValido = validarCampo(idProductoBuscar, 
+            regex.test(idProductoBuscar.value.trim()) && idProductoBuscar.value.length >= 3, 
+            'error-buscar-id'
+        );
+
+        if (!idValido) {
+            alert('Ingrese un ID válido para buscar.');
+            return;
+        }
+
+        btnBuscar.disabled = true;
+        btnBuscar.textContent = 'Buscando...';
+
+        setTimeout(() => {
+            const productoSimulado = {
+                nombre: "Laptop Gaming HP Pavilion",
+                categoria: "Electrónicos",
+                tipo: "Laptop",
+                marca: "HP",
+                modelo: "15-dw1000la",
+                proveedor: "Distribuidora Tech S.A.",
+                stock: 15,
+                precio: 1250.99,
+                codigo: "LIC-GAMING-2024",
+                fecha: "2024-01-15",
+                estado: "Disponible"
+            };
+
+            document.getElementById('nombre').value = productoSimulado.nombre;
+            document.getElementById('categoria').value = productoSimulado.categoria;
+            document.getElementById('tipo').value = productoSimulado.tipo;
+            document.getElementById('marca').value = productoSimulado.marca;
+            document.getElementById('modelo').value = productoSimulado.modelo;
+            document.getElementById('proveedor').value = productoSimulado.proveedor;
+            document.getElementById('stock').value = productoSimulado.stock;
+            document.getElementById('precio').value = productoSimulado.precio;
+            document.getElementById('codigo').value = productoSimulado.codigo;
+            document.getElementById('fecha').value = productoSimulado.fecha;
+            document.getElementById('estado').value = productoSimulado.estado;
+
+            infoProducto.textContent = `Producto: ${productoSimulado.nombre} | Categoría: ${productoSimulado.categoria} | Stock: ${productoSimulado.stock} | Precio: $${productoSimulado.precio}`;
+            productoEncontrado.classList.add('mostrar');
+            seccionModificar.style.display = 'block';
+
+            btnBuscar.disabled = false;
+            btnBuscar.textContent = 'Buscar Producto';
+
+            alert(`Producto encontrado:\n\nID: ${idProductoBuscar.value}\nNombre: ${productoSimulado.nombre}\nPrecio: $${productoSimulado.precio}`);
+        }, 1000);
+    });
+
+    // --- VALIDACIÓN Y PREVISUALIZACIÓN DE IMAGEN ---
+    const inputImagen = document.getElementById('imagen');
+    const btnSeleccionarImagen = document.getElementById('btn-seleccionar-imagen');
+    const previewImagen = document.getElementById('preview-imagen');
+    const infoArchivo = document.getElementById('info-archivo');
+    const btnEliminarImagen = document.getElementById('btn-eliminar-imagen');
+    const areaCargaImagen = document.getElementById('area-carga-imagen');
+    const errorImagen = document.getElementById('error-imagen');
+    let imagenCargada = false;
+
+    btnSeleccionarImagen.addEventListener('click', () => inputImagen.click());
+
+    inputImagen.addEventListener('change', () => {
+        const archivo = inputImagen.files[0];
+        if (archivo) {
+            const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!tiposPermitidos.includes(archivo.type)) {
+                alert('Formato de imagen no permitido. Solo JPG, PNG, GIF, WebP.');
+                inputImagen.value = '';
+                return;
+            }
+            if (archivo.size > 5 * 1024 * 1024) {
+                alert('La imagen no debe superar los 5MB.');
+                inputImagen.value = '';
+                return;
+            }
+            const lector = new FileReader();
+            lector.onload = e => {
+                previewImagen.src = e.target.result;
+                previewImagen.style.display = 'block';
+                infoArchivo.textContent = `Archivo: ${archivo.name} (${(archivo.size / 1024).toFixed(1)} KB)`;
+                imagenCargada = true;
+                errorImagen.classList.remove('mostrar');
+            };
+            lector.readAsDataURL(archivo);
+        }
+    });
+
+    btnEliminarImagen.addEventListener('click', () => {
+        inputImagen.value = '';
+        previewImagen.src = '';
+        previewImagen.style.display = 'none';
+        infoArchivo.textContent = '';
+        imagenCargada = false;
+    });
+
+    // Arrastrar y soltar imagen
+    areaCargaImagen.addEventListener('dragover', e => e.preventDefault());
+    areaCargaImagen.addEventListener('drop', e => {
+        e.preventDefault();
+        const archivo = e.dataTransfer.files[0];
+        inputImagen.files = e.dataTransfer.files;
+        inputImagen.dispatchEvent(new Event('change'));
+    });
+
+    // --- MODIFICACIÓN DE PRODUCTO ---
+    formModificar.addEventListener('submit', (e) => {
+
+        e.preventDefault();
+
+    // --- VALIDAR IMAGEN PRIMERO ---
+    if (!imagenCargada) {
+        // Mostrar mensaje visual
+        errorImagen.textContent = "La imagen es obligatoria. Por favor selecciona una imagen.";
+        errorImagen.classList.add('mostrar');
+
+        // Cambiar borde del área de carga para resaltar
+        areaCargaImagen.style.border = "2px solid red";
+
+        // Opcional: desplazar al área de imagen
+        areaCargaImagen.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        return; // detiene envío
+    } else {
+        // Restaurar estilo si hay imagen
+        errorImagen.classList.remove('mostrar');
+        areaCargaImagen.style.border = "2px dashed #ccc"; // o tu estilo original
+    }
+
+        let formularioValido = true;
+
+        // Validar todos los campos existentes...
+        camposModificar.forEach(campo => {
+            const elemento = document.getElementById(campo.id);
+            const valor = elemento.value.trim();
+            let valido = true;
+            if (campo.required && valor === '') {
+                valido = false;
+            } else if (valor !== '' && (valor.length < campo.min || valor.length > campo.max)) {
+                valido = false;
+            }
+            if (!validarCampo(elemento, valido, `error-${campo.id}`)) formularioValido = false;
+        });
+
+        // Validaciones numéricas
+        const stock = document.getElementById('stock');
+        const stockValido = !isNaN(parseInt(stock.value)) && parseInt(stock.value) >= 0 && parseInt(stock.value) <= 100000;
+        if (!validarCampo(stock, stockValido, 'error-stock')) formularioValido = false;
+
+        const precio = document.getElementById('precio');
+        const precioValido = !isNaN(parseFloat(precio.value)) && parseFloat(precio.value) >= 0.01;
+        if (!validarCampo(precio, precioValido, 'error-precio')) formularioValido = false;
+
+        const fecha = document.getElementById('fecha');
+        const fechaVal = new Date(fecha.value);
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
+        const fechaValida = fecha.value && fechaVal <= hoy;
+        if (!validarCampo(fecha, fechaValida, 'error-fecha')) formularioValido = false;
+
+        const estado = document.getElementById('estado');
+        if (!validarCampo(estado, estado.value !== '', 'error-estado')) formularioValido = false;
+
+        if (!formularioValido) {
+            alert('Complete correctamente todos los campos obligatorios, incluyendo la imagen.');
+            return; // Detiene el envío
+        }
+
+
+        // Confirmar
+        btnModificar.disabled = true;
+        btnModificar.textContent = 'Guardando...';
+
+        const confirmacionModificar = confirm(
+            `CONFIRMAR MODIFICACIÓN\n\n` +
+            `ID: ${idProductoBuscar.value}\n` +
+            `Nombre: ${document.getElementById('nombre').value}\n` +
+            `Precio: $${parseFloat(document.getElementById('precio').value).toFixed(2)}\n` +
+            `Stock: ${document.getElementById('stock').value}\n` +
+            `Estado: ${document.getElementById('estado').value}\n\n` +
+            `¿Desea guardar los cambios?`
+        );
+
+        if (confirmacionModificar) {
+            setTimeout(() => {
+                alert(`¡MODIFICACIÓN EXITOSA!\n\nEl producto ha sido actualizado correctamente.`);
+                btnModificar.disabled = false;
+                btnModificar.textContent = 'Guardar Cambios';
+                window.location.href = "modificaciones.html";
+            }, 1000);
+        } else {
+            btnModificar.disabled = false;
+            btnModificar.textContent = 'Guardar Cambios';
+        }
+    });
+
+    // --- BOTÓN CANCELAR ---
+    formModificar.addEventListener('reset', () => {
+        setTimeout(() => {
+            document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => el.classList.remove('campo-valido', 'campo-invalido'));
+            document.querySelectorAll('.mensaje-error').forEach(error => error.classList.remove('mostrar'));
+            btnModificar.textContent = 'Guardar Cambios';
+            inputImagen.value = '';
+            previewImagen.src = '';
+            previewImagen.style.display = 'none';
+            infoArchivo.textContent = '';
+            imagenCargada = false;
+        }, 0);
+    });
+
+    // Prevenir envío con Enter
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('keypress', e => {
+            if (e.key === 'Enter') e.preventDefault();
+        });
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="formulario.css">
+    <title>Eliminación - Omnipotent Tech</title>
+    <style>
+        /* --- ESTILOS DE VALIDACIÓN --- */
+        .campo-valido {
+            border-color: #28a745 !important;
+            background-color: #f8fff9;
+        }
+        .campo-invalido {
+            border-color: #dc3545 !important;
+            background-color: #fff8f8;
+        }
+        .mensaje-error {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .mensaje-error.mostrar {
+            display: block;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .grupo-campo {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-submit:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        /* --- CHECKBOX CORREGIDO --- */
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            margin-top: 2px;
+            transform: scale(1.1);
+        }
+        
+        .checkbox-container label {
+            margin: 0;
+            line-height: 1.4;
+            cursor: pointer;
+        }
+        
+        /* --- BOTONES --- */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-weight: bold;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #b02a37;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-1px);
+        }
+        
+        .grupo-botones {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        /* --- FORMULARIO --- */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        select {
+            background-color: white;
+            cursor: pointer;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Eliminación de Productos y Servicios</h1>
+        <nav>
+            <a href="index.html" style="color: #ffc107; text-decoration: none;">🏠 Inicio</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Eliminar un registro</h2>
+
+            <form id="formEliminar">
+                <!-- ID del producto -->
+                <div class="grupo-campo">
+                    <label for="id_producto">ID del Producto:</label>
+                    <input type="text" id="id_producto" name="id_producto"
+                        placeholder="Ej: PROD-001, SERV-2024" required minlength="3" maxlength="20"
+                        pattern="^[A-Za-z0-9\-_]+$">
+                    <div class="mensaje-error" id="error-id">Ingrese un ID válido (solo letras, números, guiones o guiones bajos).</div>
+                </div>
+
+                <!-- Motivo -->
+                <div class="grupo-campo">
+                    <label for="motivo">Motivo de eliminación:</label>
+                    <select id="motivo" name="motivo" required>
+                        <option value="">Seleccione un motivo</option>
+                        <option value="obsoleto">Producto obsoleto</option>
+                        <option value="sin_stock">Sin stock permanente</option>
+                        <option value="error">Error en el registro</option>
+                        <option value="otro">Otro motivo</option>
+                    </select>
+                    <div class="mensaje-error" id="error-motivo">Seleccione un motivo válido.</div>
+                </div>
+
+                <!-- Otro motivo -->
+                <div class="grupo-campo" id="otro-motivo-container" style="display: none;">
+                    <label for="otro_motivo">Especifique el motivo:</label>
+                    <textarea id="otro_motivo" name="otro_motivo" rows="3" maxlength="200"
+                        placeholder="Describa el motivo de eliminación..."></textarea>
+                    <div class="mensaje-error" id="error-otro">El motivo debe tener entre 5 y 200 caracteres.</div>
+                </div>
+
+                <!-- Confirmación -->
+                <div class="grupo-campo">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="confirmacion" required>
+                        <label for="confirmacion" style="color:#dc3545; font-weight:bold;">
+                            Confirmo que deseo eliminar este registro permanentemente.
+                        </label>
+                    </div>
+                    <div class="mensaje-error" id="error-confirmacion">Debe confirmar la eliminación.</div>
+                </div>
+
+                <div class="grupo-botones">
+                    <button type="submit" id="btn-submit" class="btn btn-danger">Eliminar Registro</button>
+                    <button type="button" class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer style="margin-bottom: auto;">
+        <div class="container">
+            <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+        </div>
+        <div class="container">
+            <p>
+                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/eliminacion.html" target="_blank">
+                    <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
+                </a>
+                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
+                    <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
+                </a>
+            </p>
+        </div>
+    </footer>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.12.0/validator.min.js"></script>
+    <script>
+        // --- ELEMENTOS ---
+        const form = document.getElementById('formEliminar');
+        const idProducto = document.getElementById('id_producto');
+        const motivo = document.getElementById('motivo');
+        const otroMotivoContainer = document.getElementById('otro-motivo-container');
+        const otroMotivo = document.getElementById('otro_motivo');
+        const confirmacion = document.getElementById('confirmacion');
+        const btnSubmit = document.getElementById('btn-submit');
+
+        // --- VALIDACIÓN VISUAL EN TIEMPO REAL ---
+        function validarCampo(input, condicionValida, idError) {
+            const error = document.getElementById(idError);
+            if (condicionValida) {
+                input.classList.remove('campo-invalido');
+                input.classList.add('campo-valido');
+                error.classList.remove('mostrar');
+                return true;
+            } else {
+                input.classList.remove('campo-valido');
+                input.classList.add('campo-invalido');
+                error.classList.add('mostrar');
+                return false;
+            }
+        }
+
+        // Validación ID Producto
+        idProducto.addEventListener('input', () => {
+            const regex = /^[A-Za-z0-9\-_]+$/;
+            validarCampo(idProducto, regex.test(idProducto.value.trim()) && idProducto.value.length >= 3, 'error-id');
+        });
+
+        // Validación Motivo
+        motivo.addEventListener('change', () => {
+            validarCampo(motivo, motivo.value !== '', 'error-motivo');
+            if (motivo.value === 'otro') {
+                otroMotivoContainer.style.display = 'block';
+                otroMotivo.required = true;
+            } else {
+                otroMotivoContainer.style.display = 'none';
+                otroMotivo.required = false;
+                otroMotivo.value = '';
+                otroMotivo.classList.remove('campo-valido', 'campo-invalido');
+                document.getElementById('error-otro').classList.remove('mostrar');
+            }
+        });
+
+        // Validación Otro Motivo
+        otroMotivo.addEventListener('input', () => {
+            validarCampo(otroMotivo, otroMotivo.value.trim().length >= 5, 'error-otro');
+        });
+
+        // Validación Confirmación
+        confirmacion.addEventListener('change', () => {
+            const errorConfirmacion = document.getElementById('error-confirmacion');
+            if (confirmacion.checked) {
+                errorConfirmacion.classList.remove('mostrar');
+            } else {
+                errorConfirmacion.classList.add('mostrar');
+            }
+        });
+
+        // --- ENVÍO DEL FORMULARIO ---
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Validar todos los campos
+            const regexId = /^[A-Za-z0-9\-_]+$/;
+            const idValido = validarCampo(idProducto, regexId.test(idProducto.value.trim()) && idProducto.value.length >= 3, 'error-id');
+            const motivoValido = validarCampo(motivo, motivo.value !== '', 'error-motivo');
+            
+            let otroMotivoValido = true;
+            if (motivo.value === 'otro') {
+                otroMotivoValido = validarCampo(otroMotivo, otroMotivo.value.trim().length >= 5, 'error-otro');
+            }
+
+            const confirmacionValida = confirmacion.checked;
+            const errorConfirmacion = document.getElementById('error-confirmacion');
+            if (!confirmacionValida) {
+                errorConfirmacion.classList.add('mostrar');
+            } else {
+                errorConfirmacion.classList.remove('mostrar');
+            }
+
+            const formularioValido = idValido && motivoValido && otroMotivoValido && confirmacionValida;
+
+            if (!formularioValido) {
+                alert('Complete correctamente todos los campos obligatorios.');
+                return;
+            }
+
+            // Cambiar estado del botón
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = 'Validando...';
+            form.classList.add('loading');
+
+            // Mostrar confirmación
+            const confirmacionEliminar = confirm(
+                `CONFIRMAR ELIMINACIÓN\n\n` +
+                `ID: ${idProducto.value}\n` +
+                `Motivo: ${motivo.options[motivo.selectedIndex].text}\n` +
+                (motivo.value === 'otro' ? `Detalle: ${otroMotivo.value}\n` : '') +
+                `\n¿Desea eliminar permanentemente este registro?\n\n` +
+                `ESTA ACCIÓN NO SE PUEDE DESHACER`
+            );
+
+            if (confirmacionEliminar) {
+                // Mostrar alerta de éxito
+                alert(
+                    `¡ELIMINACIÓN EXITOSA!\n\n` +
+                    `El registro "${idProducto.value}" fue eliminado correctamente.\n\n` +
+                    `Estado: Operación completada satisfactoriamente`
+                );
+                
+                // Resetear formulario
+                form.reset();
+                
+                // Limpiar estilos de validación
+                document.querySelectorAll('.campo-valido, .campo-invalido').forEach(el => {
+                    el.classList.remove('campo-valido', 'campo-invalido');
+                });
+                document.querySelectorAll('.mensaje-error').forEach(error => {
+                    error.classList.remove('mostrar');
+                });
+                
+                // Ocultar campo otro motivo
+                otroMotivoContainer.style.display = 'none';
+            }
+
+            // Restaurar botón
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Eliminar Registro';
+            form.classList.remove('loading');
+        });
+
+        // --- BOTÓN CANCELAR ---
+        document.getElementById('btn-cancelar').addEventListener('click', () => {
+            const confirmar = confirm('¿Desea cancelar la operación? Se perderán los datos ingresados.');
+            if (confirmar) window.location.href = 'index.html';
+        });
+
+        // Prevenir envío con Enter en campos individuales
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
