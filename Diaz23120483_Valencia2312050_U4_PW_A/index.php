@@ -232,10 +232,10 @@
         <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
         <div class="container">
             <p>
-                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/modificaciones.html" target="_blank">
+                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U4_PW_A/index.php" target="_blank">
                     <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
                 </a>
-                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U2_PW_A/formulario.css" target="_blank">
+                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U4_PW_A/estilo_base.css" target="_blank">
                     <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
                 </a>
             </p>
