@@ -1,5 +1,4 @@
 <?php
-// api/auth/registro.php
 require_once __DIR__ . '/../DBManager.php';
 
 header('Content-Type: application/json');
@@ -43,7 +42,6 @@ try {
 
 } catch (PDOException $e) {
     http_response_code(500);
-    // Error de duplicado (si 'nombre' es UNIQUE en tu BD)
     if ($e->errorInfo[1] == 1062) { 
         echo json_encode(['status' => 'error', 'message' => 'Error: El nombre de usuario ya existe.']);
     } else {

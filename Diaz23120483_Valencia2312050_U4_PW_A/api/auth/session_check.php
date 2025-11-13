@@ -1,5 +1,4 @@
 <?php
-// api/auth/session_check.php
 
 /**
  * Nuestro "Guardián" de seguridad para PHP/MySQL.
@@ -33,5 +32,4 @@ function require_session(string $allowed_role): void {
     // 3. Si todo está bien, simplemente continúa la ejecución del script que lo llamó.
 }
 
-// Establecer cabecera JSON por defecto para todos los endpoints que nos incluyan
 header('Content-Type: application/json');

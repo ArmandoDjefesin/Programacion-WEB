@@ -1,5 +1,4 @@
 <?php
-// api/auth/login.php
 require_once __DIR__ . '/../DBManager.php';
 
 session_start();
@@ -15,7 +14,7 @@ if (empty($input['nombre']) || empty($input['password'])) {
 }
 
 try {
-    // 2. Conectar a la BD (usando 'admin_app')
+    // 2. Conectar a la BD
     $pdo = DBManager::getInstance()->getConn();
 
     // 3. Buscar al usuario por su nombre
@@ -27,7 +26,6 @@ try {
     // 4. Verificar la contraseña
     if ($usuario && password_verify($input['password'], $usuario['contraseña'])) {
         
-        // ¡ÉXITO! Credenciales correctas.
         session_regenerate_id(true); // Previene fijación de sesión
         
         // 5. Almacenar datos en la Sesión
@@ -43,7 +41,6 @@ try {
         ]);
 
     } else {
-        // FALLO. Credenciales incorrectas.
         http_response_code(401); // Unauthorized
         echo json_encode(['status' => 'error', 'message' => 'Nombre de usuario o contraseña incorrectos.']);
     }

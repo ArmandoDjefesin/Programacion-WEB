@@ -16,7 +16,7 @@ if (ini_get("session.use_cookies")) {
 // 3. Finalmente, destruir la sesión
 session_destroy();
 
-// 4. Redirigir al index (que ahora será la vista de "público")
+// 4. Redirigir al index
 header('Location: ../../login.html');
 exit;
 ?>
