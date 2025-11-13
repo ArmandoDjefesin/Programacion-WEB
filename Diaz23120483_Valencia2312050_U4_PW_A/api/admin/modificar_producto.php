@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../auth/session_check.php';
 require_once __DIR__ . '/../DBManager.php';
 
-// 1. SEGURIDAD: Exigimos rol 'E' (Empleado)
+// 1. SEGURIDAD: Exigimos rol 'E'
 require_session('E');
 
 header('Content-Type: application/json');

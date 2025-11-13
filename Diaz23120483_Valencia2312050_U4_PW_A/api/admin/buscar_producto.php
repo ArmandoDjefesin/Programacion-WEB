@@ -3,12 +3,12 @@
 require_once __DIR__ . '/../auth/session_check.php';
 require_once __DIR__ . '/../DBManager.php';
 
-// 1. SEGURIDAD: Exigimos rol 'E' (Empleado)
+// 1. SEGURIDAD: Exigimos rol 'E'
 require_session('E');
 
 header('Content-Type: application/json');
 
-// 2. Obtenemos el ID desde la URL (ej: ?id=PROD-001)
+// 2. Obtenemos el ID desde la URL
 $id_producto = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
 
 if (empty($id_producto)) {
@@ -21,8 +21,6 @@ try {
     $pdo = DBManager::getInstance()->getConn();
 
     // 3. Buscar el producto por ID
-    // ¡Tu SQL original usa `id_producto` como INT, no como STRING 'PROD-001'!
-    // Asumiré que es un INT. Si es un STRING, cambia 'id_producto' = :id
     $sql = "SELECT * FROM productos WHERE id_producto = :id_producto";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id_producto' => $id_producto]);
