@@ -8,7 +8,6 @@
     try {
         $pdo = DBManager::getInstance()->getConn();
         
-        // ¡SQL ACTUALIZADO! Ahora traemos 'cantidad_stock'
         $sql = "SELECT 
                     id_producto, descripcion, precio_unitario, imagen, 
                     tipo, marca, modelo_version, proveedor, estado, cantidad_stock 
