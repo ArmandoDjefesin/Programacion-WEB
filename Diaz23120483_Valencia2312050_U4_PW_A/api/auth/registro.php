@@ -24,8 +24,6 @@ try {
     // 3. Hashear la contraseña (¡NUNCA guardes texto plano!)
     // password_hash() usa el algoritmo Bcrypt por defecto.
     $hash_contraseña = password_hash($input['password'], PASSWORD_DEFAULT);
-
-    // 4. Insertar el nuevo usuario
     $sql = "INSERT INTO usuarios (nombre, contraseña, rol) VALUES (:nombre, :password, :rol)";
     $stmt = $pdo->prepare($sql);
     
