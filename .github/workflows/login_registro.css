@@ -1,0 +1,97 @@
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    flex: 1; /* Esto asegura que ocupe el espacio entre header y footer */
+}
+header .container {
+    justify-content: center;
+    text-align: center;
+}
+/* La tarjeta blanca del formulario */
+.login-card {
+    background: #fff;
+    padding: 2rem 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-card h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: #14213d; /* Color del header de formulario.css */
+}
+
+/* Contenedor para cada par de label/input */
+.grupo-campo {
+    margin-bottom: 1.5rem;
+    text-align: left; /* Alinea las etiquetas a la izquierda */
+}
+
+/* * ARREGLO PARA LA CONTRASEÑA:
+ * 'display: block' pone la etiqueta ENCIMA del input, no al lado.
+*/
+.grupo-campo label {
+    display: block;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Inputs y Selects */
+.grupo-campo input[type="text"],
+.grupo-campo input[type="password"],
+.grupo-campo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box; /* Asegura que el padding no rompa el ancho */
+}
+
+/* Botón de envío */
+.btn-submit {
+    width: 100%;
+    padding: 12px;
+    background: #4cc9f0; /* Color de formulario.css */
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    background: #3a86ff; /* Color de formulario.css */
+}
+
+.btn-submit:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Estilos de validación */
+.campo-invalido {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+.mensaje-error {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+    display: none; 
+}
+
+.mensaje-error.mostrar {
+    display: block;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo_base.css">
+    <link rel="stylesheet" href="formulario.css">
+    <title>Eliminación - Omnipotent Tech</title>
+    <style>
+        .campo-invalido { border-color: #dc3545 !important; background-color: #fff8f8; }
+        .mensaje-error { color: #dc3545; font-size: 0.875em; margin-top: 0.25rem; display: none; }
+        .mensaje-error.mostrar { display: block; }
+        .grupo-campo { position: relative; margin-bottom: 1rem; }
+        .btn-submit:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; }
+        .grupo-botones { display: flex; gap: 15px; margin-top: 2rem; justify-content: center; }
+        .btn { padding: 10px 20px; border: none; cursor: pointer; border-radius: 5px; transition: all 0.2s ease; font-weight: bold; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #b02a37; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #545b62; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Eliminación de Productos</h1>
+            <nav>
+                <a href="index.php" class="home-button" style="text-decoration:none; color: #fff; background: #4cc9f0; padding: 6px 14px; border-radius: 5px;">🏠 Catálogo</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor-principal">
+        <section class="form-container">
+            <h2>Eliminar un registro</h2>
+
+            <form id="formEliminar">
+                <div class="grupo-campo">
+                    <label for="id_producto">ID del Producto (Numérico):</label>
+                    <input type="number" id="id_producto" name="id_producto"
+                           placeholder="Ej: 1, 2, 3..." required min="1">
+                    <div class="mensaje-error" id="error-id">Ingrese un ID numérico válido.</div>
+                </div>
+
+                <div class="grupo-campo">
+                    <label for="motivo">Motivo de eliminación:</label>
+                    <select id="motivo" name="motivo" required>
+                        <option value="">Seleccione un motivo</option>
+                        <option value="obsoleto">Producto obsoleto</option>
+                        <option value="sin_stock">Sin stock permanente</option>
+                        <option value="error">Error en el registro</option>
+                        <option value="otro">Otro motivo</option>
+                    </select>
+                    <div class="mensaje-error" id="error-motivo">Seleccione un motivo válido.</div>
+                </div>
+
+                <div class="grupo-campo" id="otro-motivo-container" style="display: none;">
+                    <label for="otro_motivo">Especifique el motivo:</label>
+                    <textarea id="otro_motivo" name="otro_motivo" rows="3" maxlength="200"
+                              placeholder="Describa el motivo de eliminación..."></textarea>
+                    <div class="mensaje-error" id="error-otro">El motivo debe tener entre 5 y 200 caracteres.</div>
+                </div>
+
+                <div class="grupo-campo">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="confirmacion" required>
+                        <label for="confirmacion" style="color:#dc3545; font-weight:bold;">
+                            Confirmo que deseo eliminar este registro permanentemente.
+                        </label>
+                    </div>
+                    <div class="mensaje-error" id="error-confirmacion">Debe confirmar la eliminación.</div>
+                </div>
+                
+                <div id="mensajeGeneral" class="mensaje-error" style="text-align: center; font-size: 1em;"></div>
+
+                <div class="grupo-botones">
+                    <button type="submit" id="btn-submit" class="btn btn-danger">Eliminar Registro</button>
+                    <button type="reset" class="btn btn-secondary" id="btn-cancelar">Cancelar</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>Omnipotent Tech © 2025 - Todos los derechos reservados</p>
+        <div class="container">
+            <p>
+                <a href="https://validator.w3.org/nu/?doc=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U4_PW_A/eliminacion.html" target="_blank">
+                    <img src="https://www.w3.org/Icons/valid-html401" alt="Valid HTML">
+                </a>
+                <a href="https://jigsaw.w3.org/css-validator/validator?uri=https://armandodjefesin.github.io/Programacion-WEB/Diaz23120483_Valencia2312050_U4_PW_A/formulario.css" target="_blank">
+                    <img src="https://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS">
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    
+    <script src="js/eliminacion.js"></script>
+</body>
+</html>
